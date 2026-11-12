@@ -1029,72 +1029,72 @@ function resetIncomeForm() {
 
   incomeAmountWheelList.scrollTop = 0;
   updateIncomeAmountWheel();
-}      $("cancelEdit").addEventListener("click",resetIncomeForm);
 
+}
+$("cancelEdit").addEventListener("click", resetIncomeForm);
 
-if (id) {
-  const g = data.goals.find(x => x.id === id);
+$("goalForm").addEventListener("submit", e => {
+  e.preventDefault();
 
-  if (g) {
-    const oldMonth = goalMonthKey(g);
-    const wasPrimary = !!g.primary;
+  const name = $("goalName").value.trim();
+  const amount = Number($("goalAmount").value);
+  const goalDate = $("goalMonth").value;
+  const month = monthKey(goalDate);
+  const id = $("goalEditId").value;
 
-    Object.assign(g, {
-      name,
-      amount,
-      month: goalDate
-    });
+  if (!name || !(amount > 0) || !goalDate) {
+    return alert("يرجى إدخال اسم الهدف وقيمته والشهر بشكل صحيح.");
+  }
 
-    // إذا نُقل الهدف الأساسي، عيّن بديلاً في الشهر القديم
-    if (oldMonth !== month && wasPrimary) {
-      const oldGoals = data.goals.filter(
-        x => goalMonthKey(x) === oldMonth && x.id !== id
+  if (id) {
+    const g = data.goals.find(x => x.id === id);
+
+    if (g) {
+      const oldMonth = goalMonthKey(g);
+      const wasPrimary = !!g.primary;
+
+      Object.assign(g, { name, amount, month: goalDate });
+
+      if (oldMonth !== month && wasPrimary) {
+        const oldGoals = data.goals.filter(
+          x => goalMonthKey(x) === oldMonth && x.id !== id
+        );
+
+        oldGoals.forEach(x => x.primary = false);
+
+        if (oldGoals.length) {
+          oldGoals[0].primary = true;
+        }
+      }
+
+      const newGoals = data.goals.filter(
+        x => goalMonthKey(x) === month
       );
 
-      oldGoals.forEach(x => x.primary = false);
+      const hasOtherPrimary = newGoals.some(
+        x => x.id !== id && x.primary
+      );
 
-      if (oldGoals.length) {
-        oldGoals[0].primary = true;
+      if (wasPrimary || !hasOtherPrimary) {
+        newGoals.forEach(x => x.primary = x.id === id);
       }
     }
-
-    // تأكد من وجود هدف أساسي واحد في الشهر الجديد
-    const newGoals = data.goals.filter(
-      x => goalMonthKey(x) === month
+  } else {
+    const first = !data.goals.some(
+      g => goalMonthKey(g) === month && g.primary
     );
 
-    const hasOtherPrimary = newGoals.some(
-      x => x.id !== id && x.primary
-    );
-
-    if (wasPrimary || !hasOtherPrimary) {
-      newGoals.forEach(x => x.primary = x.id === id);
-    }
-  }
-} else {
-  const first = !data.goals.some(
-    g => goalMonthKey(g) === month && g.primary
-  );
-
-  data.goals.push({
-    id: uid(),
-    name,
-    amount,
-    month: goalDate,
-    primary: first
-  });
-}
     data.goals.push({
-      id:uid(),
+      id: uid(),
       name,
       amount,
-      month:goalDate,
-      primary:first
+      month: goalDate,
+      primary: first
     });
   }
 
-  selectedMonth=month;
-  $("monthPicker").value=month;
+  selectedMonth = month;
+  $("monthPicker").value = month;
   resetGoalForm();
   save();
 });
