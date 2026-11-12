@@ -1150,25 +1150,139 @@ data.goals.filter(g=>goalMonthKey(g)===selectedMonth).forEach(g=>g.primary=g.id=
         a.click();URL.revokeObjectURL(url);
       });
 
+      function validateImportedData(imported) {
+        const isObject = value =>
+          value !== null &&
+          typeof value === "object" &&
+          !Array.isArray(value);
+
+        const validDate = value => {
+          if (typeof value !== "string" ||
+              !/^\d{4}-\d{2}-\d{2}$/.test(value)) return false;
+
+          const [y, m, d] = value.split("-").map(Number);
+          const date = new Date(y, m - 1, d);
+
+          return date.getFullYear() === y &&
+            date.getMonth() === m - 1 &&
+            date.getDate() === d;
+        };
+
+        const validMonth = value =>
+          typeof value === "string" &&
+          (/^\d{4}-\d{2}$/.test(value) ||
+           validDate(value));
+
+        if (!isObject(imported)) return false;
+
+        if (!Array.isArray(imported.transactions) ||
+            !Array.isArray(imported.goals) ||
+            !Array.isArray(imported.holidays)) return false;
+
+        if (imported.settings !== undefined &&
+            !isObject(imported.settings)) return false;
+
+        const settings = imported.settings || {};
+
+        for (const key of [
+          "includeToday",
+          "excludeHolidays",
+          "darkMode"
+        ]) {
+          if (settings[key] !== undefined &&
+              typeof settings[key] !== "boolean") return false;
+        }
+
+        const transactionIds = new Set();
+
+        for (const t of imported.transactions) {
+          if (!isObject(t) ||
+              typeof t.id !== "string" ||
+              !t.id.trim() ||
+              transactionIds.has(t.id) ||
+              !Number.isFinite(t.amount) ||
+              t.amount < 50000 ||
+              t.amount > 500000 ||
+              (t.amount - 50000) % 5000 !== 0 ||
+              !validDate(t.date) ||
+              !["مبيعات", "عمولة", "دخل إضافي", "أخرى"].includes(t.category) ||
+              (t.note !== undefined && typeof t.note !== "string")) {
+            return false;
+          }
+
+          transactionIds.add(t.id);
+        }
+
+        const goalIds = new Set();
+
+        for (const g of imported.goals) {
+          if (!isObject(g) ||
+              typeof g.id !== "string" ||
+              !g.id.trim() ||
+              goalIds.has(g.id) ||
+              typeof g.name !== "string" ||
+              !g.name.trim() ||
+              g.name.length > 50 ||
+              !Number.isFinite(g.amount) ||
+              g.amount <= 0 ||
+              !validMonth(g.month) ||
+              (g.primary !== undefined &&
+               typeof g.primary !== "boolean")) {
+            return false;
+          }
+
+          goalIds.add(g.id);
+        }
+
+        for (const holiday of imported.holidays) {
+          if (!validDate(holiday)) return false;
+        }
+
+        return true;
+      }
+
       $("importFile").addEventListener("change",async e=>{
         const file=e.target.files[0];
         if(!file) return;
+
         try {
           const imported=JSON.parse(await file.text());
-          if(!imported || !Array.isArray(imported.transactions) || !Array.isArray(imported.goals) || !Array.isArray(imported.holidays)) throw new Error("invalid");
-          if(!confirm("سيتم استبدال البيانات الحالية بالنسخة المستوردة. هل تريد المتابعة؟")) return;
-          data={
-            transactions:imported.transactions,
-            goals:imported.goals,
-            holidays:imported.holidays,
-            settings:{includeToday:true,excludeHolidays:true,darkMode:false,...(imported.settings||{})}
-          };
-          save();
-          alert("تم استيراد النسخة الاحتياطية.");
-        } catch(err) { alert("الملف غير صالح أو لا يتوافق مع نسخة التطبيق."); }
-        e.target.value="";
-      });
 
+          if(!validateImportedData(imported)) {
+            throw new Error("Invalid backup data");
+          }
+
+          if(!confirm("سيتم استبدال البيانات الحالية بالنسخة المستوردة. هل تريد المتابعة؟")) return;
+
+          const previousData = data;
+
+          data = {
+            transactions: imported.transactions,
+            goals: imported.goals,
+            holidays: [...new Set(imported.holidays)],
+            settings: {
+              includeToday:true,
+              excludeHolidays:true,
+              darkMode:false,
+              ...(imported.settings || {})
+            }
+          };
+
+          if (!save()) {
+            data = previousData;
+            renderAll();
+            return;
+          }
+
+          alert("تم استيراد النسخة الاحتياطية بنجاح.");
+
+        } catch(err) {
+          console.error("فشل استيراد النسخة الاحتياطية:", err);
+          alert("الملف غير صالح أو يحتوي على بيانات غير مكتملة أو تالفة.");
+        } finally {
+          e.target.value="";
+        }
+      });
       $("clearData").addEventListener("click",()=>{
         if(!confirm("تحذير: سيتم حذف جميع الأهداف والإيرادات والعطلات نهائياً من هذا الجهاز. هل أنت متأكد؟")) return;
         if(!confirm("تأكيد أخير: هل أنشأت نسخة احتياطية قبل الحذف؟")) return;
