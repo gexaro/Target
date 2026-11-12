@@ -658,10 +658,30 @@ let selectedMonth = currentMonth();
       }
 
       function save() {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-        renderAll();
-      }
+        try {
+          const serializedData = JSON.stringify(data);
 
+          localStorage.setItem(STORAGE_KEY, serializedData);
+
+          lastSavedData = serializedData;
+        } catch (error) {
+          console.error("فشل حفظ بيانات Target:", error);
+
+          data = JSON.parse(lastSavedData);
+
+          alert(
+            "تعذر حفظ التغييرات على الجهاز.\n" +
+            "تمت إعادة البيانات إلى آخر نسخة محفوظة بنجاح.\n\n" +
+            "تحقق من مساحة التخزين أو إعدادات المتصفح، ثم حاول مجدداً."
+          );
+
+          renderAll();
+          return false;
+        }
+
+        renderAll();
+        return true;
+      }
       function monthTransactions(month) {
         return data.transactions.filter(t => monthKey(t.date) === month);
       }
