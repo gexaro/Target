@@ -836,7 +836,16 @@
       window.showView = showView;
 
       document.querySelectorAll(".nav-item").forEach(btn=>btn.addEventListener("click",()=>showView(btn.dataset.view)));
+const incomeAmountSelect = $("incomeAmount");
 
+for (let amount = 50000; amount <= 500000; amount += 5000) {
+  const option = document.createElement("option");
+  option.value = amount;
+  option.textContent = amount.toLocaleString("en-US") + " د.ع";
+  incomeAmountSelect.appendChild(option);
+}
+
+incomeAmountSelect.value = "50000";
       $("monthPicker").value = selectedMonth;
       $("goalMonth").value = selectedMonth;
       $("incomeDate").value = dateKey(new Date());
