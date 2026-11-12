@@ -639,9 +639,9 @@ padding: calc(17px + env(safe-area-inset-top, 0px)) 0 14px;
       const money = n => Math.round(Number(n)||0).toLocaleString("en-US") + " د.ع";
       const uid = () => (crypto.randomUUID ? crypto.randomUUID() : Date.now().toString(36)+Math.random().toString(36).slice(2));
 
-      let data = loadData();
-      let selectedMonth = currentMonth();
-
+let data = loadData();
+let lastSavedData = JSON.stringify(data);
+let selectedMonth = currentMonth();
       function loadData() {
         try {
           const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
