@@ -210,6 +210,63 @@
       outline: none; min-height: 45px;
     }
     .field input:focus, .field select:focus { border-color: var(--accent); }
+    .amount-wheel {
+  position: relative;
+  height: 180px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--surface-2);
+}
+
+.amount-wheel-list {
+  height: 100%;
+  overflow-y: auto;
+  scroll-snap-type: y mandatory;
+  scrollbar-width: none;
+  padding: 68px 0;
+  text-align: center;
+}
+
+.amount-wheel-list::-webkit-scrollbar {
+  display: none;
+}
+
+.amount-wheel-option {
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  scroll-snap-align: center;
+  font-size: 16px;
+  color: var(--muted);
+  transition: color .15s, font-size .15s;
+}
+
+.amount-wheel-option.active {
+  color: var(--accent);
+  font-size: 21px;
+  font-weight: 900;
+}
+
+.amount-wheel-selection {
+  position: absolute;
+  top: 68px;
+  left: 10px;
+  right: 10px;
+  height: 44px;
+  border-top: 1px solid var(--accent);
+  border-bottom: 1px solid var(--accent);
+  pointer-events: none;
+}
+
+.amount-native-select {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
     .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
     .full-btn { width: 100%; margin-top: 4px; }
 
