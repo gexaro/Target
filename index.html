@@ -1037,7 +1037,15 @@ $("goalMonth").value=selectedMonth + "-01";
           const t=data.transactions.find(x=>x.id===editTx.dataset.editTx);
           if(!t) return;
           $("editId").value=t.id;
-          $("incomeAmount").value=t.amount;
+$("incomeAmount").value = String(t.amount);
+
+const amountIndex = Array.from(incomeAmountSelect.options)
+  .findIndex(option => Number(option.value) === Number(t.amount));
+
+if (amountIndex >= 0) {
+  incomeAmountWheelList.scrollTop = amountIndex * 44;
+  updateIncomeAmountWheel();
+}
           $("incomeDate").value=t.date;
           $("incomeCategory").value=t.category;
           $("incomeNote").value=t.note||"";
