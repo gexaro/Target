@@ -963,7 +963,9 @@ $("goalMonth").value=selectedMonth + "-01";
           $("goalEditId").value=g.id;
           $("goalName").value=g.name;
           $("goalAmount").value=g.amount;
-          $("goalMonth").value=g.month;
+$("goalMonth").value = g.month.length === 7
+  ? g.month + "-01"
+  : g.month;
           $("goalSubmit").textContent="حفظ تعديلات الهدف";
           $("cancelGoalEdit").classList.remove("hidden");
           window.scrollTo({top:0,behavior:"smooth"});
