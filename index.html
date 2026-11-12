@@ -926,7 +926,7 @@ $("goalForm").addEventListener("submit",e=>{
       function resetGoalForm() {
         $("goalForm").reset();
         $("goalEditId").value="";
-        $("goalMonth").value=selectedMonth;
+$("goalMonth").value=selectedMonth + "-01";
         $("goalSubmit").textContent="＋ إضافة هدف";
         $("cancelGoalEdit").classList.add("hidden");
       }
