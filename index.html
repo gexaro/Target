@@ -367,7 +367,12 @@
             <input type="hidden" id="editId">
             <div class="field">
               <label for="incomeAmount">المبلغ (دينار عراقي)</label>
-<select id="incomeAmount" required></select>
+<div class="amount-wheel" id="incomeAmountWheel">
+  <div class="amount-wheel-list" id="incomeAmountWheelList"></div>
+  <div class="amount-wheel-selection"></div>
+</div>
+
+<select id="incomeAmount" class="amount-native-select" required></select>
             </div>
             <div class="form-row">
               <div class="field">
