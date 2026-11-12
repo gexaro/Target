@@ -891,26 +891,38 @@ $("goalMonth").value = selectedMonth + "-01";
       }
       $("cancelEdit").addEventListener("click",resetIncomeForm);
 
-      $("goalForm").addEventListener("submit",e=>{
-        e.preventDefault();
-        const name=$("goalName").value.trim();
-        const amount=Number($("goalAmount").value);
-        const month=$("goalMonth").value;
-        if(!name || !(amount>0) || !month) return alert("يرجى إكمال بيانات الهدف.");
-        const id=$("goalEditId").value;
-        if(id) {
-          const g=data.goals.find(x=>x.id===id);
-          if(g) Object.assign(g,{name,amount,month});
-        } else {
-          const first=!data.goals.some(g=>g.month===month);
-          data.goals.push({id:uid(),name,amount,month,primary:first});
-        }
-        selectedMonth=month;
-        $("monthPicker").value=month;
-        resetGoalForm();
-        save();
-      });
+$("goalForm").addEventListener("submit",e=>{
+  e.preventDefault();
 
+  const name=$("goalName").value.trim();
+  const amount=Number($("goalAmount").value);
+  const goalDate=$("goalMonth").value;
+
+  if(!name || !(amount>0) || !goalDate)
+    return alert("يرجى إكمال بيانات الهدف.");
+
+  const month=goalDate.slice(0,7);
+  const id=$("goalEditId").value;
+
+  if(id) {
+    const g=data.goals.find(x=>x.id===id);
+    if(g) Object.assign(g,{name,amount,month:goalDate});
+  } else {
+    const first=!data.goals.some(g=>goalMonthKey(g)===month);
+    data.goals.push({
+      id:uid(),
+      name,
+      amount,
+      month:goalDate,
+      primary:first
+    });
+  }
+
+  selectedMonth=month;
+  $("monthPicker").value=month;
+  resetGoalForm();
+  save();
+});
       function resetGoalForm() {
         $("goalForm").reset();
         $("goalEditId").value="";
