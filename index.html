@@ -1028,24 +1028,59 @@ function resetIncomeForm() {
   updateIncomeAmountWheel();
 }      $("cancelEdit").addEventListener("click",resetIncomeForm);
 
-$("goalForm").addEventListener("submit",e=>{
-  e.preventDefault();
 
-  const name=$("goalName").value.trim();
-  const amount=Number($("goalAmount").value);
-  const goalDate=$("goalMonth").value;
+if (id) {
+  const g = data.goals.find(x => x.id === id);
 
-  if(!name || !(amount>0) || !goalDate)
-    return alert("يرجى إكمال بيانات الهدف.");
+  if (g) {
+    const oldMonth = goalMonthKey(g);
+    const wasPrimary = !!g.primary;
 
-  const month=goalDate.slice(0,7);
-  const id=$("goalEditId").value;
+    Object.assign(g, {
+      name,
+      amount,
+      month: goalDate
+    });
 
-  if(id) {
-    const g=data.goals.find(x=>x.id===id);
-    if(g) Object.assign(g,{name,amount,month:goalDate});
-  } else {
-    const first=!data.goals.some(g=>goalMonthKey(g)===month);
+    // إذا نُقل الهدف الأساسي، عيّن بديلاً في الشهر القديم
+    if (oldMonth !== month && wasPrimary) {
+      const oldGoals = data.goals.filter(
+        x => goalMonthKey(x) === oldMonth && x.id !== id
+      );
+
+      oldGoals.forEach(x => x.primary = false);
+
+      if (oldGoals.length) {
+        oldGoals[0].primary = true;
+      }
+    }
+
+    // تأكد من وجود هدف أساسي واحد في الشهر الجديد
+    const newGoals = data.goals.filter(
+      x => goalMonthKey(x) === month
+    );
+
+    const hasOtherPrimary = newGoals.some(
+      x => x.id !== id && x.primary
+    );
+
+    if (wasPrimary || !hasOtherPrimary) {
+      newGoals.forEach(x => x.primary = x.id === id);
+    }
+  }
+} else {
+  const first = !data.goals.some(
+    g => goalMonthKey(g) === month && g.primary
+  );
+
+  data.goals.push({
+    id: uid(),
+    name,
+    amount,
+    month: goalDate,
+    primary: first
+  });
+}
     data.goals.push({
       id:uid(),
       name,
