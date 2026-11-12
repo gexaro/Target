@@ -712,21 +712,33 @@ function monthGoals(month) {
         return new Date(year, mon, 0).getDate();
       }
 
-      function remainingWorkDays(month) {
-        const [year, mon] = month.split("-").map(Number);
-        const now = dateKey(new Date());
-        const isCurrent = month === currentMonth();
-        const first = isCurrent ? (data.settings.includeToday ? today.getDate() : today.getDate()+1) : 1;
-        if (isCurrent && first > getDays(month)) return 0;
 
-        let count = 0;
-        for (let day=first; day<=getDays(month); day++) {
-          const d = `${month}-${String(day).padStart(2,"0")}`;
-          if (data.settings.excludeHolidays && data.holidays.includes(d)) continue;
-          count++;
-        }
-        return count;
-      }
+function remainingWorkDays(month) {
+  const isCurrent = month === currentMonth();
+
+  // الشهر الماضي: لا توجد أيام عمل متبقية
+  if (month < currentMonth()) return 0;
+
+  const first = isCurrent
+    ? (data.settings.includeToday ? today.getDate() : today.getDate() + 1)
+    : 1;
+
+  if (isCurrent && first > getDays(month)) return 0;
+
+  let count = 0;
+
+  for (let day = first; day <= getDays(month); day++) {
+    const d = `${month}-${String(day).padStart(2, "0")}`;
+
+    if (data.settings.excludeHolidays && data.holidays.includes(d)) {
+      continue;
+    }
+
+    count++;
+  }
+
+  return count;
+}
 
       function fmtDate(date) {
         return new Date(date+"T12:00:00").toLocaleDateString("ar-IQ",{day:"numeric",month:"short"});
