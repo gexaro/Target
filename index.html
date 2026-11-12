@@ -592,10 +592,13 @@
         return data.transactions.filter(t => monthKey(t.date) === month);
       }
 
-      function monthGoals(month) {
-        return data.goals.filter(g => g.month === month);
-      }
+function goalMonthKey(goal) {
+  return (goal.month || "").slice(0, 7);
+}
 
+function monthGoals(month) {
+  return data.goals.filter(g => goalMonthKey(g) === month);
+}
       function mainGoal(month) {
         const goals = monthGoals(month);
         return goals.find(g => g.primary) || goals[0] || null;
