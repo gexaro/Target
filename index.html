@@ -975,14 +975,16 @@ $("goalMonth").value = selectedMonth + "-01";
         showView("income");
       });
 
-      function resetIncomeForm() {
-        $("incomeForm").reset();
-        $("editId").value="";
-        $("incomeDate").value=dateKey(new Date());
-        $("incomeSubmit").textContent="＋ إضافة العملية";
-        $("cancelEdit").classList.add("hidden");
-      }
-      $("cancelEdit").addEventListener("click",resetIncomeForm);
+function resetIncomeForm() {
+  $("incomeForm").reset();
+  $("editId").value = "";
+  $("incomeDate").value = dateKey(new Date());
+  $("incomeSubmit").textContent = "＋ إضافة العملية";
+  $("cancelEdit").classList.add("hidden");
+
+  incomeAmountWheelList.scrollTop = 0;
+  updateIncomeAmountWheel();
+}      $("cancelEdit").addEventListener("click",resetIncomeForm);
 
 $("goalForm").addEventListener("submit",e=>{
   e.preventDefault();
