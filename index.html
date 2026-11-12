@@ -975,7 +975,7 @@ $("goalMonth").value = g.month.length === 7
           const wasPrimary=data.goals.find(g=>g.id===id)?.primary;
           data.goals=data.goals.filter(g=>g.id!==id);
           if(wasPrimary) {
-            const next=data.goals.find(g=>g.month===selectedMonth);
+const next=data.goals.find(g=>goalMonthKey(g)===selectedMonth);
             if(next) next.primary=true;
           }
           save();
