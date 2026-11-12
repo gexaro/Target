@@ -808,8 +808,10 @@ function remainingWorkDays(month) {
           <div>
             <div class="tx-amount">${money(t.amount)}</div>
             <div class="tx-actions">
-              <button class="tiny-btn" data-edit-tx="${t.id}">تعديل</button>
-              <button class="tiny-btn" data-delete-tx="${t.id}">حذف</button>
+
+<button class="tiny-btn" data-edit-tx="${escapeHTML(t.id)}">تعديل</button>
+<button class="tiny-btn" data-delete-tx="${escapeHTML(t.id)}">حذف</button>
+
             </div>
           </div>
         </div>`;
