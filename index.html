@@ -911,6 +911,37 @@ for (let amount = 50000; amount <= 500000; amount += 5000) {
 }
 
 incomeAmountSelect.value = "50000";
+      const incomeAmountWheelList = $("incomeAmountWheelList");
+
+Array.from(incomeAmountSelect.options).forEach((option, index) => {
+  const item = document.createElement("div");
+
+  item.className = "amount-wheel-option";
+  item.textContent = option.textContent;
+  item.dataset.index = index;
+
+  incomeAmountWheelList.appendChild(item);
+});
+
+function updateIncomeAmountWheel() {
+  const index = Math.round(incomeAmountWheelList.scrollTop / 44);
+  const options = incomeAmountWheelList.querySelectorAll(".amount-wheel-option");
+
+  options.forEach((item, i) => {
+    item.classList.toggle("active", i === index);
+  });
+
+  if (incomeAmountSelect.options[index]) {
+    incomeAmountSelect.selectedIndex = index;
+  }
+}
+
+incomeAmountWheelList.addEventListener("scroll", () => {
+  updateIncomeAmountWheel();
+});
+
+incomeAmountWheelList.scrollTop = 0;
+updateIncomeAmountWheel();
       $("monthPicker").value = selectedMonth;
 $("goalMonth").value = selectedMonth + "-01";
       $("incomeDate").value = dateKey(new Date());
