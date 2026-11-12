@@ -1,0 +1,23 @@
+
+{
+  "id": "./",
+  "name": "Target - Daily Goal Tracker",
+  "short_name": "Target",
+  "description": "تطبيق إدارة الأهداف الشهرية والتارگت اليومي والإيرادات",
+  "lang": "ar",
+  "dir": "rtl",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#f3f6fb",
+  "theme_color": "#14243f",
+  "icons": [
+    {
+      "src": "./icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}
