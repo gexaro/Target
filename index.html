@@ -850,13 +850,13 @@ for (let amount = 50000; amount <= 500000; amount += 5000) {
 
 incomeAmountSelect.value = "50000";
       $("monthPicker").value = selectedMonth;
-      $("goalMonth").value = selectedMonth;
+$("goalMonth").value = selectedMonth + "-01";
       $("incomeDate").value = dateKey(new Date());
 
       $("monthPicker").addEventListener("change",e=>{
         if(!e.target.value) return;
         selectedMonth = e.target.value;
-        $("goalMonth").value = selectedMonth;
+$("goalMonth").value = selectedMonth + "-01";
         renderAll();
       });
 
