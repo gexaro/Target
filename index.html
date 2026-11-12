@@ -72,7 +72,7 @@
 
     .topbar {
       display: flex; justify-content: space-between; align-items: center;
-      padding: 17px 0 14px;
+padding: calc(17px + env(safe-area-inset-top, 0px)) 0 14px;
     }
     .brand { display: flex; align-items: center; gap: 11px; }
     .brand-icon {
