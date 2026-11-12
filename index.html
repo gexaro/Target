@@ -982,7 +982,7 @@ const next=data.goals.find(g=>goalMonthKey(g)===selectedMonth);
         }
         if(primaryGoal) {
           const id=primaryGoal.dataset.primaryGoal;
-          data.goals.filter(g=>g.month===selectedMonth).forEach(g=>g.primary=g.id===id);
+data.goals.filter(g=>goalMonthKey(g)===selectedMonth).forEach(g=>g.primary=g.id===id);
           save();
         }
         if(removeHoliday) {
