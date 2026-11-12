@@ -1264,9 +1264,10 @@ data.goals.filter(g=>goalMonthKey(g)===selectedMonth).forEach(g=>g.primary=g.id=
         const goalIds = new Set();
 
         for (const g of imported.goals) {
-          if (!isObject(g) ||
+
               typeof g.id !== "string" ||
-              !g.id.trim() ||
+              !/^[A-Za-z0-9_-]{1,100}$/.test(g.id) ||
+              goalIds.has(g.id) ||
               goalIds.has(g.id) ||
               typeof g.name !== "string" ||
               !g.name.trim() ||
