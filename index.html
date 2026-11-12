@@ -1267,7 +1267,8 @@ data.goals.filter(g=>goalMonthKey(g)===selectedMonth).forEach(g=>g.primary=g.id=
           if (!isObject(g) ||
               typeof g.id !== "string" ||
               !/^[A-Za-z0-9_-]{1,100}$/.test(g.id) ||
-              goalIds.has(g.id) ||              typeof g.name !== "string" ||
+              goalIds.has(g.id) ||
+              typeof g.name !== "string" ||
               !g.name.trim() ||
               g.name.length > 50 ||
               !Number.isFinite(g.amount) ||
