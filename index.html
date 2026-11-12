@@ -1244,8 +1244,9 @@ data.goals.filter(g=>goalMonthKey(g)===selectedMonth).forEach(g=>g.primary=g.id=
 
         for (const t of imported.transactions) {
           if (!isObject(t) ||
+
               typeof t.id !== "string" ||
-              !t.id.trim() ||
+              !/^[A-Za-z0-9_-]{1,100}$/.test(t.id) ||
               transactionIds.has(t.id) ||
               !Number.isFinite(t.amount) ||
               t.amount < 50000 ||
