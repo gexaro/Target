@@ -850,9 +850,10 @@ function remainingWorkDays(month) {
             <div class="goal-line" style="margin-top:7px">
               <span class="muted" style="font-size:10px">${pct.toFixed(1)}% إنجاز</span>
               <span>
-                <button class="tiny-btn" data-primary-goal="${g.id}">جعله أساسياً</button>
-                <button class="tiny-btn" data-edit-goal="${g.id}">تعديل</button>
-                <button class="tiny-btn" data-delete-goal="${g.id}">حذف</button>
+
+<button class="tiny-btn" data-primary-goal="${escapeHTML(g.id)}">جعله أساسياً</button>
+<button class="tiny-btn" data-edit-goal="${escapeHTML(g.id)}">تعديل</button>
+<button class="tiny-btn" data-delete-goal="${escapeHTML(g.id)}">حذف</button>
               </span>
             </div>
           </div>`;
