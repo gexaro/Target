@@ -706,7 +706,7 @@ let selectedMonth = currentMonth();
               settings: { includeToday:true, excludeHolidays:true, darkMode:false, ...(saved.settings||{}) }
             };          }
         } catch (e) { console.warn("تعذر قراءة البيانات المحفوظة", e); }
-        return { transactions:[], goals:[], holidays:[], settings:{includeToday:true,excludeHolidays:true,darkMode:false} };
+        return { transactions:[], goals:[], debts:[], holidays:[], settings:{includeToday:true,excludeHolidays:true,darkMode:false} };
       }
 
       function save() {
