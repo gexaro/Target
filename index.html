@@ -504,6 +504,59 @@ padding: calc(17px + env(safe-area-inset-top, 0px)) 0 14px;
           <div class="section-head"><div class="section-title">أهداف الشهر المحدد</div></div>
           <div class="panel" id="goalsList"></div>
         </div>
+        <div class="section">
+  <div class="section-head">
+    <div class="section-title">الديون المستحقة</div>
+    <span class="muted" id="debtCount">0 دين</span>
+  </div>
+
+  <div class="panel">
+    <div style="margin-bottom:15px">
+      <div class="mini-label">إجمالي الديون المتبقية</div>
+      <div class="daily-number" id="debtTotal">0 د.ع</div>
+      <div class="muted" style="font-size:10px;margin-top:4px">
+        لا تُحتسب ضمن التارگت إلا عند التسديد.
+      </div>
+    </div>
+
+    <form id="debtForm">
+      <input type="hidden" id="debtEditId">
+
+      <div class="field">
+        <label for="debtAmount">مبلغ الدين (دينار عراقي)</label>
+        <input
+          id="debtAmount"
+          type="number"
+          min="1"
+          step="1"
+          inputmode="numeric"
+          placeholder="مثلاً 25000"
+          required
+        >
+      </div>
+
+      <button class="primary-btn full-btn" type="submit" id="debtSubmit">
+        ＋ إضافة دين
+      </button>
+
+      <button
+        class="secondary-btn full-btn hidden"
+        type="button"
+        id="cancelDebtEdit"
+        style="margin-top:8px"
+      >
+        إلغاء التعديل
+      </button>
+    </form>
+  </div>
+
+  <div class="section">
+    <div class="section-head">
+      <div class="section-title">سجل الديون</div>
+    </div>
+    <div class="panel" id="debtsList"></div>
+  </div>
+</div>
         <div class="notice">الهدف الأساسي هو الذي يُستخدم لحساب التارگت اليومي. يمكنك تغيير الهدف الأساسي من قائمة الأهداف.</div>
       </section>
 
