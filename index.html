@@ -912,7 +912,67 @@ function remainingWorkDays(month) {
           </div>`;
         }).join("");
       }
+      function renderDebts() {
+        const debts = Array.isArray(data.debts) ? data.debts : [];
 
+        const remainingTotal = debts.reduce((sum, debt) => {
+          return sum + Math.max(0, Number(debt.amount) - Number(debt.paid || 0));
+        }, 0);
+
+        const openCount = debts.filter(debt =>
+          Number(debt.amount) > Number(debt.paid || 0)
+        ).length;
+
+        $("debtCount").textContent = openCount + " دين";
+        $("debtTotal").textContent = money(remainingTotal);
+
+        if (!debts.length) {
+          $("debtsList").innerHTML =
+            `<div class="empty"><div class="empty-icon">📋</div>لا توجد ديون مسجلة حالياً.</div>`;
+          return;
+        }
+
+        $("debtsList").innerHTML = debts
+          .slice()
+          .sort((a, b) => b.date.localeCompare(a.date))
+          .map(debt => {
+            const amount = Number(debt.amount);
+            const paid = Number(debt.paid || 0);
+            const remaining = Math.max(0, amount - paid);
+
+            return `
+              <div class="goal-item">
+                <div class="goal-line">
+                  <div>
+                    <div class="goal-name">دين #${escapeHTML(String(debt.id).slice(-5))}</div>
+                    <div class="muted" style="font-size:10px">
+                      تاريخ الإضافة: ${fmtDate(debt.date)}
+                    </div>
+                  </div>
+                  <div class="goal-amount">${money(remaining)}</div>
+                </div>
+
+                <div class="muted" style="font-size:11px;margin-top:8px">
+                  المبلغ الأصلي: ${money(amount)}
+                  · المسدد: ${money(paid)}
+                </div>
+
+                <div class="goal-line" style="margin-top:10px">
+                  <span class="muted" style="font-size:10px">
+                    ${remaining === 0 ? "مسدد بالكامل" : "المبلغ المتبقي"}
+                  </span>
+                  <span>
+                    ${remaining > 0
+                      ? `<button class="tiny-btn" data-pay-debt="${escapeHTML(debt.id)}">تسديد</button>`
+                      : ""}
+                    <button class="tiny-btn" data-edit-debt="${escapeHTML(debt.id)}">تعديل</button>
+                    <button class="tiny-btn" data-delete-debt="${escapeHTML(debt.id)}">حذف</button>
+                  </span>
+                </div>
+              </div>
+            `;
+          }).join("");
+      }
       function renderCalendar() {
         const [year, mon] = selectedMonth.split("-").map(Number);
         const firstDay = new Date(year,mon-1,1).getDay();
