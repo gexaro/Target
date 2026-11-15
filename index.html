@@ -1293,6 +1293,28 @@ if (amountIndex >= 0) {
           showView("income");
           $("incomeAmount").focus();
         }
+                if(editDebt) {
+          const debt = data.debts.find(d => d.id === editDebt.dataset.editDebt);
+          if (!debt) return;
+
+          debtEditId = debt.id;
+          $("debtEditId").value = debt.id;
+          $("debtAmount").value = debt.amount;
+          $("debtSubmit").textContent = "حفظ تعديلات الدين";
+          $("cancelDebtEdit").classList.remove("hidden");
+
+          document.getElementById("debtForm").scrollIntoView({
+            behavior: "smooth",
+            block: "center"
+          });
+        }
+
+        if(deleteDebt && confirm("هل تريد حذف هذا الدين؟")) {
+          const id = deleteDebt.dataset.deleteDebt;
+          data.debts = data.debts.filter(d => d.id !== id);
+          resetDebtForm();
+          save();
+        }
         if(deleteTx && confirm("هل تريد حذف هذه العملية؟")) {
           data.transactions=data.transactions.filter(t=>t.id!==deleteTx.dataset.deleteTx);
           save();
