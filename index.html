@@ -1211,6 +1211,47 @@ $("goalForm").addEventListener("submit", e => {
   resetGoalForm();
   save();
 });
+      let debtEditId = "";
+
+      $("debtForm").addEventListener("submit", e => {
+        e.preventDefault();
+
+        const amount = Number($("debtAmount").value);
+        if (!Number.isInteger(amount) || amount <= 0) {
+          return alert("أدخل مبلغ دين صحيح.");
+        }
+
+        if (debtEditId) {
+          const debt = data.debts.find(d => d.id === debtEditId);
+          if (!debt) return;
+
+          if (amount < Number(debt.paid || 0)) {
+            return alert("لا يمكن أن يكون مبلغ الدين أقل من المبلغ المسدد سابقاً.");
+          }
+
+          debt.amount = amount;
+        } else {
+          data.debts.push({
+            id: uid(),
+            amount,
+            paid: 0,
+            date: dateKey(new Date())
+          });
+        }
+
+        resetDebtForm();
+        save();
+      });
+
+      function resetDebtForm() {
+        $("debtForm").reset();
+        debtEditId = "";
+        $("debtEditId").value = "";
+        $("debtSubmit").textContent = "＋ إضافة دين";
+        $("cancelDebtEdit").classList.add("hidden");
+      }
+
+      $("cancelDebtEdit").addEventListener("click", resetDebtForm);
       function resetGoalForm() {
         $("goalForm").reset();
         $("goalEditId").value="";
