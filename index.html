@@ -1262,6 +1262,9 @@ $("goalMonth").value=selectedMonth + "-01";
       $("cancelGoalEdit").addEventListener("click",resetGoalForm);
 
       document.addEventListener("click",e=>{
+                const payDebt = e.target.closest("[data-pay-debt]");
+        const editDebt = e.target.closest("[data-edit-debt]");
+        const deleteDebt = e.target.closest("[data-delete-debt]");
         const editTx=e.target.closest("[data-edit-tx]");
         const deleteTx=e.target.closest("[data-delete-tx]");
         const editGoal=e.target.closest("[data-edit-goal]");
