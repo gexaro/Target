@@ -1315,6 +1315,44 @@ if (amountIndex >= 0) {
           resetDebtForm();
           save();
         }
+                if(payDebt) {
+          const debt = data.debts.find(d => d.id === payDebt.dataset.payDebt);
+          if (!debt) return;
+
+          const remaining = Number(debt.amount) - Number(debt.paid || 0);
+          if (remaining <= 0) return;
+
+          const input = prompt(
+            "المبلغ المراد تسديده:\nالمتبقي: " + money(remaining)
+          );
+
+          if (input === null) return;
+
+          const payment = Number(input);
+
+          if (!Number.isInteger(payment) || payment <= 0) {
+            return alert("أدخل مبلغاً صحيحاً.");
+          }
+
+          if (payment > remaining) {
+            return alert("المبلغ أكبر من الدين المتبقي.");
+          }
+
+          debt.paid = Number(debt.paid || 0) + payment;
+
+          data.transactions.push({
+            id: uid(),
+            amount: payment,
+            date: dateKey(new Date()),
+            category: "تسديد دين",
+            note: "تسديد دين"
+          });
+
+          selectedMonth = currentMonth();
+          $("monthPicker").value = selectedMonth;
+
+          save();
+        }
         if(deleteTx && confirm("هل تريد حذف هذه العملية؟")) {
           data.transactions=data.transactions.filter(t=>t.id!==deleteTx.dataset.deleteTx);
           save();
