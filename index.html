@@ -7,7 +7,7 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <title>Target | إدارة التارگت</title>
-<link rel="manifest" href="./manifest.json">
+  <link rel="manifest" href="./manifest.json">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -71,7 +71,7 @@
 
     .topbar {
       display: flex; justify-content: space-between; align-items: center;
-padding: calc(17px + env(safe-area-inset-top, 0px)) 0 14px;
+      padding: calc(17px + env(safe-area-inset-top, 0px)) 0 14px;
     }
     .brand { display: flex; align-items: center; gap: 11px; }
     .brand-icon {
@@ -182,27 +182,29 @@ padding: calc(17px + env(safe-area-inset-top, 0px)) 0 14px;
 
     .view { display: none; }
     .view.active { display: block; }
-.bottom-nav {
-  position: fixed;
-  position: -webkit-fixed;
-  z-index: 999;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  width: 100%;
-  padding: 9px 12px calc(9px + env(safe-area-inset-bottom));
-  background: var(--surface);
-  border-top: 1px solid var(--border);
-  display: flex;
-  justify-content: space-around;
-  max-width: 760px;
-  margin: 0 auto;
-  box-shadow: 0 -7px 25px rgba(20, 40, 70, .045);
-  transform: translate3d(0, 0, 0);
-  -webkit-transform: translate3d(0, 0, 0);
-  -webkit-backface-visibility: hidden;
-  will-change: transform;
-}    .nav-item {
+
+    .bottom-nav {
+      position: fixed;
+      position: -webkit-fixed;
+      z-index: 999;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      width: 100%;
+      padding: 9px 12px calc(9px + env(safe-area-inset-bottom));
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-around;
+      max-width: 760px;
+      margin: 0 auto;
+      box-shadow: 0 -7px 25px rgba(20, 40, 70, .045);
+      transform: translate3d(0, 0, 0);
+      -webkit-transform: translate3d(0, 0, 0);
+      -webkit-backface-visibility: hidden;
+      will-change: transform;
+    }
+    .nav-item {
       border: 0; background: none; color: var(--muted);
       display: flex; flex-direction: column; align-items: center;
       gap: 3px; font-size: 10px; min-width: 55px; padding: 3px;
@@ -221,63 +223,57 @@ padding: calc(17px + env(safe-area-inset-top, 0px)) 0 14px;
       outline: none; min-height: 45px;
     }
     .field input:focus, .field select:focus { border-color: var(--accent); }
+    .field input:disabled { opacity: .6; }
+
     .amount-wheel {
-  position: relative;
-  height: 180px;
-  overflow: hidden;
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  background: var(--surface-2);
-}
-
-.amount-wheel-list {
-  height: 100%;
-  overflow-y: auto;
-  scroll-snap-type: y mandatory;
-  scrollbar-width: none;
-  padding: 68px 0;
-  text-align: center;
-}
-
-.amount-wheel-list::-webkit-scrollbar {
-  display: none;
-}
-
-.amount-wheel-option {
-  height: 44px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  scroll-snap-align: center;
-  font-size: 16px;
-  color: var(--muted);
-  transition: color .15s, font-size .15s;
-}
-
-.amount-wheel-option.active {
-  color: var(--accent);
-  font-size: 21px;
-  font-weight: 900;
-}
-
-.amount-wheel-selection {
-  position: absolute;
-  top: 68px;
-  left: 10px;
-  right: 10px;
-  height: 44px;
-  border-top: 1px solid var(--accent);
-  border-bottom: 1px solid var(--accent);
-  pointer-events: none;
-}
-
-.amount-native-select {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  opacity: 0;
-  pointer-events: none;
-}
+      position: relative;
+      height: 180px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      background: var(--surface-2);
+    }
+    .amount-wheel-list {
+      height: 100%;
+      overflow-y: auto;
+      scroll-snap-type: y mandatory;
+      scrollbar-width: none;
+      padding: 68px 0;
+      text-align: center;
+    }
+    .amount-wheel-list::-webkit-scrollbar { display: none; }
+    .amount-wheel-option {
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      scroll-snap-align: center;
+      font-size: 16px;
+      color: var(--muted);
+      transition: color .15s, font-size .15s;
+    }
+    .amount-wheel-option.active {
+      color: var(--accent);
+      font-size: 21px;
+      font-weight: 900;
+    }
+    .amount-wheel-selection {
+      position: absolute;
+      top: 68px;
+      left: 10px;
+      right: 10px;
+      height: 44px;
+      border-top: 1px solid var(--accent);
+      border-bottom: 1px solid var(--accent);
+      pointer-events: none;
+    }
+    .amount-native-select {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      opacity: 0;
+      pointer-events: none;
+    }
     .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
     .full-btn { width: 100%; margin-top: 4px; }
 
@@ -433,27 +429,34 @@ padding: calc(17px + env(safe-area-inset-top, 0px)) 0 14px;
         <div class="panel">
           <form id="incomeForm">
             <input type="hidden" id="editId">
-            <div class="field">
-              <label for="incomeAmount">المبلغ (دينار عراقي)</label>
-<div class="amount-wheel" id="incomeAmountWheel">
-  <div class="amount-wheel-list" id="incomeAmountWheelList"></div>
-  <div class="amount-wheel-selection"></div>
-</div>
 
-<select id="incomeAmount" class="amount-native-select" required></select>
+            <div class="field" id="incomeAmountField">
+              <label for="incomeAmount">المبلغ (دينار عراقي)</label>
+              <div class="amount-wheel" id="incomeAmountWheel">
+                <div class="amount-wheel-list" id="incomeAmountWheelList"></div>
+                <div class="amount-wheel-selection"></div>
+              </div>
+              <select id="incomeAmount" class="amount-native-select"></select>
             </div>
+
+            <div class="field hidden" id="debtPaymentField">
+              <label for="debtPaymentAmount">مبلغ التسديد (دينار عراقي)</label>
+              <input id="debtPaymentAmount" type="number" min="1" step="1" inputmode="numeric" disabled>
+            </div>
+
             <div class="form-row">
               <div class="field">
                 <label for="incomeDate">التاريخ</label>
                 <input id="incomeDate" type="date" required>
               </div>
-                            <div class="field">
+              <div class="field">
                 <label for="incomeCategory">نوع العملية</label>
                 <select id="incomeCategory">
                   <option value="مبيعات">مبيعات</option>
                   <option value="عمولة">عمولة</option>
                   <option value="دخل إضافي">دخل إضافي</option>
                   <option value="أخرى">أخرى</option>
+                  <option value="تسديد دين" disabled>تسديد دين</option>
                 </select>
               </div>
             </div>
@@ -493,7 +496,7 @@ padding: calc(17px + env(safe-area-inset-top, 0px)) 0 14px;
             </div>
             <div class="field">
               <label for="goalMonth">الشهر</label>
-<input id="goalMonth" type="date" required>
+              <input id="goalMonth" type="date" required>
             </div>
             <button class="primary-btn full-btn" type="submit" id="goalSubmit">＋ إضافة هدف</button>
             <button class="secondary-btn full-btn hidden" type="button" id="cancelGoalEdit" style="margin-top:8px">إلغاء تعديل الهدف</button>
@@ -504,59 +507,41 @@ padding: calc(17px + env(safe-area-inset-top, 0px)) 0 14px;
           <div class="section-head"><div class="section-title">أهداف الشهر المحدد</div></div>
           <div class="panel" id="goalsList"></div>
         </div>
+
         <div class="section">
-  <div class="section-head">
-    <div class="section-title">الديون المستحقة</div>
-    <span class="muted" id="debtCount">0 دين</span>
-  </div>
+          <div class="section-head">
+            <div class="section-title">الديون المستحقة</div>
+            <span class="muted" id="debtCount">0 دين</span>
+          </div>
 
-  <div class="panel">
-    <div style="margin-bottom:15px">
-      <div class="mini-label">إجمالي الديون المتبقية</div>
-      <div class="daily-number" id="debtTotal">0 د.ع</div>
-      <div class="muted" style="font-size:10px;margin-top:4px">
-        لا تُحتسب ضمن التارگت إلا عند التسديد.
-      </div>
-    </div>
+          <div class="panel">
+            <div style="margin-bottom:15px">
+              <div class="mini-label">إجمالي الديون المتبقية</div>
+              <div class="daily-number" id="debtTotal">0 د.ع</div>
+              <div class="muted" style="font-size:10px;margin-top:4px">
+                لا تُحتسب ضمن التارگت إلا عند التسديد.
+              </div>
+            </div>
 
-    <form id="debtForm">
-      <input type="hidden" id="debtEditId">
+            <form id="debtForm">
+              <input type="hidden" id="debtEditId">
+              <div class="field">
+                <label for="debtAmount">مبلغ الدين (دينار عراقي)</label>
+                <input id="debtAmount" type="number" min="1" step="1" inputmode="numeric" placeholder="مثلاً 25000" required>
+              </div>
+              <button class="primary-btn full-btn" type="submit" id="debtSubmit">＋ إضافة دين</button>
+              <button class="secondary-btn full-btn hidden" type="button" id="cancelDebtEdit" style="margin-top:8px">إلغاء التعديل</button>
+            </form>
+          </div>
 
-      <div class="field">
-        <label for="debtAmount">مبلغ الدين (دينار عراقي)</label>
-        <input
-          id="debtAmount"
-          type="number"
-          min="1"
-          step="1"
-          inputmode="numeric"
-          placeholder="مثلاً 25000"
-          required
-        >
-      </div>
+          <div class="section">
+            <div class="section-head">
+              <div class="section-title">سجل الديون</div>
+            </div>
+            <div class="panel" id="debtsList"></div>
+          </div>
+        </div>
 
-      <button class="primary-btn full-btn" type="submit" id="debtSubmit">
-        ＋ إضافة دين
-      </button>
-
-      <button
-        class="secondary-btn full-btn hidden"
-        type="button"
-        id="cancelDebtEdit"
-        style="margin-top:8px"
-      >
-        إلغاء التعديل
-      </button>
-    </form>
-  </div>
-
-  <div class="section">
-    <div class="section-head">
-      <div class="section-title">سجل الديون</div>
-    </div>
-    <div class="panel" id="debtsList"></div>
-  </div>
-</div>
         <div class="notice">الهدف الأساسي هو الذي يُستخدم لحساب التارگت اليومي. يمكنك تغيير الهدف الأساسي من قائمة الأهداف.</div>
       </section>
 
@@ -680,83 +665,149 @@ padding: calc(17px + env(safe-area-inset-top, 0px)) 0 14px;
       "use strict";
 
       const STORAGE_KEY = "target_app_data_v1";
+      const DEBT_CATEGORY = "تسديد دين";
+      const INCOME_CATEGORIES = ["مبيعات", "عمولة", "دخل إضافي", "أخرى"];
+      const WHEEL_STEP_PX = 44;
+
       const $ = id => document.getElementById(id);
-      const today = new Date();
+      const pad2 = n => String(n).padStart(2, "0");
+      const now = () => new Date();
       const dateKey = d => {
         const x = new Date(d);
-        return `${x.getFullYear()}-${String(x.getMonth()+1).padStart(2,"0")}-${String(x.getDate()).padStart(2,"0")}`;
+        return `${x.getFullYear()}-${pad2(x.getMonth() + 1)}-${pad2(x.getDate())}`;
       };
-      const monthKey = d => d.slice(0,7);
-      const currentMonth = () => dateKey(new Date()).slice(0,7);
-      const money = n => Math.round(Number(n)||0).toLocaleString("en-US") + " د.ع";
-      const uid = () => (crypto.randomUUID ? crypto.randomUUID() : Date.now().toString(36)+Math.random().toString(36).slice(2));
+      const monthKey = d => String(d).slice(0, 7);
+      const currentMonth = () => dateKey(now()).slice(0, 7);
+      const money = n => Math.round(Number(n) || 0).toLocaleString("en-US") + " د.ع";
+      const uid = () => (crypto.randomUUID ? crypto.randomUUID() : Date.now().toString(36) + Math.random().toString(36).slice(2));
+      const isObject = v => v !== null && typeof v === "object" && !Array.isArray(v);
 
-let data = loadData();
-let lastSavedData = JSON.stringify(data);
-let selectedMonth = currentMonth();
+      const isValidDate = value => {
+        if (typeof value !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(value)) return false;
+        const [y, m, d] = value.split("-").map(Number);
+        const date = new Date(y, m - 1, d);
+        return date.getFullYear() === y && date.getMonth() === m - 1 && date.getDate() === d;
+      };
+
+      const toEnglishDigits = s => String(s ?? "")
+        .replace(/[\u0660-\u0669]/g, c => String(c.charCodeAt(0) - 0x0660))
+        .replace(/[\u06F0-\u06F9]/g, c => String(c.charCodeAt(0) - 0x06F0));
+
+      const parseAmount = s => {
+        const clean = toEnglishDigits(s).replace(/[,\s\u066C]/g, "");
+        return /^\d+$/.test(clean) ? Number(clean) : NaN;
+      };
+
+      const emptyData = () => ({
+        transactions: [],
+        goals: [],
+        debts: [],
+        holidays: [],
+        settings: { includeToday: true, excludeHolidays: true, darkMode: false }
+      });
+
+      function sumLinked(transactions, debtId) {
+        return transactions
+          .filter(t => t.debtId === debtId)
+          .reduce((s, t) => s + Number(t.amount || 0), 0);
+      }
+
+      // يحوّل الديون إلى الصيغة الجديدة: المسدد القديم يُحفظ في legacyPaid
+      function normalizeDebts(debts, transactions) {
+        return debts.map(d => {
+          const linked = sumLinked(transactions, d.id);
+          const legacyPaid = d.legacyPaid !== undefined
+            ? Number(d.legacyPaid)
+            : Math.max(0, Number(d.paid || 0) - linked);
+          return {
+            id: d.id,
+            amount: Number(d.amount),
+            date: d.date,
+            legacyPaid
+          };
+        });
+      }
+
       function loadData() {
         try {
           const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
           if (saved && Array.isArray(saved.transactions) && Array.isArray(saved.goals)) {
+            const transactions = saved.transactions;
             return {
-              transactions: saved.transactions,
+              transactions,
               goals: saved.goals,
-              debts: Array.isArray(saved.debts) ? saved.debts : [],
+              debts: Array.isArray(saved.debts) ? normalizeDebts(saved.debts, transactions) : [],
               holidays: Array.isArray(saved.holidays) ? saved.holidays : [],
-              settings: { includeToday:true, excludeHolidays:true, darkMode:false, ...(saved.settings||{}) }
-            };          }
-        } catch (e) { console.warn("تعذر قراءة البيانات المحفوظة", e); }
-        return { transactions:[], goals:[], debts:[], holidays:[], settings:{includeToday:true,excludeHolidays:true,darkMode:false} };
+              settings: { includeToday: true, excludeHolidays: true, darkMode: false, ...(saved.settings || {}) }
+            };
+          }
+        } catch (e) {
+          console.warn("تعذر قراءة البيانات المحفوظة", e);
+        }
+        return emptyData();
+      }
+
+      let data = loadData();
+      let lastSavedData = JSON.stringify(data);
+      let selectedMonth = currentMonth();
+      let debtEditId = "";
+
+      // المسدد = الرصيد القديم + مجموع الدفعات المرتبطة عبر debtId
+      function debtPaid(debt) {
+        return Number(debt.legacyPaid || 0) + sumLinked(data.transactions, debt.id);
+      }
+
+      function debtRemaining(debt) {
+        return Math.max(0, Number(debt.amount) - debtPaid(debt));
       }
 
       function save() {
         try {
+          data.debts.forEach(d => { d.paid = debtPaid(d); });
           const serializedData = JSON.stringify(data);
-
           localStorage.setItem(STORAGE_KEY, serializedData);
-
           lastSavedData = serializedData;
         } catch (error) {
           console.error("فشل حفظ بيانات Target:", error);
-
           data = JSON.parse(lastSavedData);
-
           alert(
             "تعذر حفظ التغييرات على الجهاز.\n" +
             "تمت إعادة البيانات إلى آخر نسخة محفوظة بنجاح.\n\n" +
             "تحقق من مساحة التخزين أو إعدادات المتصفح، ثم حاول مجدداً."
           );
-
           renderAll();
           return false;
         }
-
         renderAll();
         return true;
       }
+
       function monthTransactions(month) {
         return data.transactions.filter(t => monthKey(t.date) === month);
       }
 
-function goalMonthKey(goal) {
-  return (goal.month || "").slice(0, 7);
-}
+      function goalMonthKey(goal) {
+        return (goal.month || "").slice(0, 7);
+      }
 
-function monthGoals(month) {
-  return data.goals.filter(g => goalMonthKey(g) === month);
-}
+      function monthGoals(month) {
+        return data.goals.filter(g => goalMonthKey(g) === month);
+      }
+
       function mainGoal(month) {
         const goals = monthGoals(month);
         return goals.find(g => g.primary) || goals[0] || null;
       }
 
       function sumTransactions(list) {
-        return list.reduce((s,t) => s + Number(t.amount||0), 0);
+        return list.reduce((s, t) => s + Number(t.amount || 0), 0);
       }
 
       function dailySums(month) {
         const result = {};
-        monthTransactions(month).forEach(t => result[t.date] = (result[t.date]||0) + Number(t.amount||0));
+        monthTransactions(month).forEach(t => {
+          result[t.date] = (result[t.date] || 0) + Number(t.amount || 0);
+        });
         return result;
       }
 
@@ -765,36 +816,40 @@ function monthGoals(month) {
         return new Date(year, mon, 0).getDate();
       }
 
+      function remainingWorkDays(month) {
+        const current = currentMonth();
+        if (month < current) return 0;
 
-function remainingWorkDays(month) {
-  const isCurrent = month === currentMonth();
+        const isCurrent = month === current;
+        const todayNum = now().getDate();
+        const first = isCurrent
+          ? (data.settings.includeToday ? todayNum : todayNum + 1)
+          : 1;
 
-  // الشهر الماضي: لا توجد أيام عمل متبقية
-  if (month < currentMonth()) return 0;
-
-  const first = isCurrent
-    ? (data.settings.includeToday ? today.getDate() : today.getDate() + 1)
-    : 1;
-
-  if (isCurrent && first > getDays(month)) return 0;
-
-  let count = 0;
-
-  for (let day = first; day <= getDays(month); day++) {
-    const d = `${month}-${String(day).padStart(2, "0")}`;
-
-    if (data.settings.excludeHolidays && data.holidays.includes(d)) {
-      continue;
-    }
-
-    count++;
-  }
-
-  return count;
-}
+        let count = 0;
+        for (let day = first; day <= getDays(month); day++) {
+          const d = `${month}-${pad2(day)}`;
+          if (data.settings.excludeHolidays && data.holidays.includes(d)) continue;
+          count++;
+        }
+        return count;
+      }
 
       function fmtDate(date) {
-        return new Date(date+"T12:00:00").toLocaleDateString("ar-IQ",{day:"numeric",month:"short"});
+        return new Date(date + "T12:00:00").toLocaleDateString("ar-IQ", { day: "numeric", month: "short" });
+      }
+
+      function escapeHTML(value) {
+        return String(value ?? "").replace(/[&<>"']/g, c => ({
+          "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+        }[c]));
+      }
+
+      function compact(n) {
+        n = Number(n) || 0;
+        if (n >= 1000000) return (n / 1000000).toFixed(1) + "م";
+        if (n >= 1000) return (n / 1000).toFixed(0) + "ك";
+        return n.toLocaleString("en-US");
       }
 
       function renderDashboard() {
@@ -803,17 +858,17 @@ function remainingWorkDays(month) {
         const goalValue = goal ? Number(goal.amount) : 0;
         const txs = monthTransactions(month);
         const earned = sumTransactions(txs);
-        const remaining = Math.max(0, goalValue-earned);
+        const remaining = Math.max(0, goalValue - earned);
         const days = remainingWorkDays(month);
-        const daily = days ? remaining/days : 0;
-        const percent = goalValue ? Math.min(100, earned/goalValue*100) : 0;
-        const activeDays = new Set(txs.map(t=>t.date)).size;
-        const average = activeDays ? earned/activeDays : 0;
+        const daily = days ? remaining / days : 0;
+        const percent = goalValue ? Math.min(100, earned / goalValue * 100) : 0;
+        const activeDays = new Set(txs.map(t => t.date)).size;
+        const average = activeDays ? earned / activeDays : 0;
 
         $("heroEarned").textContent = money(earned);
-        $("heroGoal").textContent = "الهدف: "+money(goalValue);
-        $("mainProgress").style.width = percent+"%";
-        $("progressPercent").textContent = percent.toFixed(1)+"% من الهدف";
+        $("heroGoal").textContent = "الهدف: " + money(goalValue);
+        $("mainProgress").style.width = percent + "%";
+        $("progressPercent").textContent = percent.toFixed(1) + "% من الهدف";
         $("statGoal").textContent = money(goalValue);
         $("statRemaining").textContent = money(remaining);
         $("statDays").textContent = days;
@@ -837,16 +892,19 @@ function remainingWorkDays(month) {
         }
 
         const monthDays = getDays(month);
-        const elapsed = month === currentMonth() ? today.getDate() : monthDays;
-        const expected = elapsed ? earned/elapsed*monthDays : 0;
+        const elapsed = month === currentMonth() ? now().getDate() : monthDays;
+        const expected = elapsed ? earned / elapsed * monthDays : 0;
         const forecast = month === currentMonth() ? expected : earned;
         $("forecastValue").textContent = money(forecast);
-        $("forecastStatus").textContent = goalValue ? (forecast>=goalValue ? "على المسار" : "دون الهدف") : "لا يوجد هدف";
+        $("forecastStatus").textContent = goalValue ? (forecast >= goalValue ? "على المسار" : "دون الهدف") : "لا يوجد هدف";
         $("forecastText").textContent = goalValue
-          ? `بحسب معدل الدخل الحالي، التوقع ${forecast>=goalValue ? "يتجاوز" : "أقل من"} الهدف بمقدار ${money(Math.abs(forecast-goalValue))}.`
+          ? `بحسب معدل الدخل الحالي، التوقع ${forecast >= goalValue ? "يتجاوز" : "أقل من"} الهدف بمقدار ${money(Math.abs(forecast - goalValue))}.`
           : "أضف هدفاً شهرياً لعرض التوقع.";
 
-        renderTransactions("recentTransactions", txs.slice().sort((a,b)=>b.date.localeCompare(a.date)).slice(0,4));
+        renderTransactions(
+          "recentTransactions",
+          txs.slice().sort((a, b) => b.date.localeCompare(a.date)).slice(0, 4)
+        );
       }
 
       function transactionHTML(t) {
@@ -855,16 +913,14 @@ function remainingWorkDays(month) {
             <div class="tx-icon">↗</div>
             <div style="min-width:0">
               <div class="tx-title">${escapeHTML(t.note || t.category || "دخل")}</div>
-              <div class="tx-date">${fmtDate(t.date)} · ${escapeHTML(t.category||"أخرى")}</div>
+              <div class="tx-date">${fmtDate(t.date)} · ${escapeHTML(t.category || "أخرى")}</div>
             </div>
           </div>
           <div>
             <div class="tx-amount">${money(t.amount)}</div>
             <div class="tx-actions">
-
-<button class="tiny-btn" data-edit-tx="${escapeHTML(t.id)}">تعديل</button>
-<button class="tiny-btn" data-delete-tx="${escapeHTML(t.id)}">حذف</button>
-
+              <button class="tiny-btn" data-edit-tx="${escapeHTML(t.id)}">تعديل</button>
+              <button class="tiny-btn" data-delete-tx="${escapeHTML(t.id)}">حذف</button>
             </div>
           </div>
         </div>`;
@@ -880,8 +936,8 @@ function remainingWorkDays(month) {
       }
 
       function renderIncome() {
-        const list = monthTransactions(selectedMonth).slice().sort((a,b)=>b.date.localeCompare(a.date));
-        $("transactionCount").textContent = list.length+" عملية";
+        const list = monthTransactions(selectedMonth).slice().sort((a, b) => b.date.localeCompare(a.date));
+        $("transactionCount").textContent = list.length + " عملية";
         renderTransactions("allTransactions", list);
       }
 
@@ -893,35 +949,33 @@ function remainingWorkDays(month) {
         }
         const earned = sumTransactions(monthTransactions(selectedMonth));
         $("goalsList").innerHTML = list.map(g => {
-          const pct = Math.min(100, g.amount ? earned/g.amount*100 : 0);
+          const pct = Math.min(100, g.amount ? earned / g.amount * 100 : 0);
           return `<div class="goal-item">
             <div class="goal-line">
-              <div><div class="goal-name">${escapeHTML(g.name)} ${g.primary ? "★" : ""}</div><div class="muted" style="font-size:10px">${g.primary ? "الهدف الأساسي" : "هدف إضافي"}</div></div>
+              <div>
+                <div class="goal-name">${escapeHTML(g.name)} ${g.primary ? "★" : ""}</div>
+                <div class="muted" style="font-size:10px">${g.primary ? "الهدف الأساسي" : "هدف إضافي"}</div>
+              </div>
               <div class="goal-amount">${money(g.amount)}</div>
             </div>
             <div class="goal-progress"><span style="width:${pct}%"></span></div>
             <div class="goal-line" style="margin-top:7px">
               <span class="muted" style="font-size:10px">${pct.toFixed(1)}% إنجاز</span>
               <span>
-
-<button class="tiny-btn" data-primary-goal="${escapeHTML(g.id)}">جعله أساسياً</button>
-<button class="tiny-btn" data-edit-goal="${escapeHTML(g.id)}">تعديل</button>
-<button class="tiny-btn" data-delete-goal="${escapeHTML(g.id)}">حذف</button>
+                <button class="tiny-btn" data-primary-goal="${escapeHTML(g.id)}">جعله أساسياً</button>
+                <button class="tiny-btn" data-edit-goal="${escapeHTML(g.id)}">تعديل</button>
+                <button class="tiny-btn" data-delete-goal="${escapeHTML(g.id)}">حذف</button>
               </span>
             </div>
           </div>`;
         }).join("");
       }
+
       function renderDebts() {
-        const debts = Array.isArray(data.debts) ? data.debts : [];
+        const debts = data.debts;
 
-        const remainingTotal = debts.reduce((sum, debt) => {
-          return sum + Math.max(0, Number(debt.amount) - Number(debt.paid || 0));
-        }, 0);
-
-        const openCount = debts.filter(debt =>
-          Number(debt.amount) > Number(debt.paid || 0)
-        ).length;
+        const remainingTotal = debts.reduce((sum, debt) => sum + debtRemaining(debt), 0);
+        const openCount = debts.filter(debt => debtRemaining(debt) > 0).length;
 
         $("debtCount").textContent = openCount + " دين";
         $("debtTotal").textContent = money(remainingTotal);
@@ -934,10 +988,10 @@ function remainingWorkDays(month) {
 
         $("debtsList").innerHTML = debts
           .slice()
-          .sort((a, b) => b.date.localeCompare(a.date))
+          .sort((a, b) => String(b.date).localeCompare(String(a.date)))
           .map(debt => {
             const amount = Number(debt.amount);
-            const paid = Number(debt.paid || 0);
+            const paid = debtPaid(debt);
             const remaining = Math.max(0, amount - paid);
 
             return `
@@ -945,18 +999,13 @@ function remainingWorkDays(month) {
                 <div class="goal-line">
                   <div>
                     <div class="goal-name">دين #${escapeHTML(String(debt.id).slice(-5))}</div>
-                    <div class="muted" style="font-size:10px">
-                      تاريخ الإضافة: ${fmtDate(debt.date)}
-                    </div>
+                    <div class="muted" style="font-size:10px">تاريخ الإضافة: ${fmtDate(debt.date)}</div>
                   </div>
                   <div class="goal-amount">${money(remaining)}</div>
                 </div>
-
                 <div class="muted" style="font-size:11px;margin-top:8px">
-                  المبلغ الأصلي: ${money(amount)}
-                  · المسدد: ${money(paid)}
+                  المبلغ الأصلي: ${money(amount)} · المسدد: ${money(paid)}
                 </div>
-
                 <div class="goal-line" style="margin-top:10px">
                   <span class="muted" style="font-size:10px">
                     ${remaining === 0 ? "مسدد بالكامل" : "المبلغ المتبقي"}
@@ -973,35 +1022,36 @@ function remainingWorkDays(month) {
             `;
           }).join("");
       }
+
       function renderCalendar() {
         const [year, mon] = selectedMonth.split("-").map(Number);
-        const firstDay = new Date(year,mon-1,1).getDay();
+        const firstDay = new Date(year, mon - 1, 1).getDay();
         const days = getDays(selectedMonth);
         const sums = dailySums(selectedMonth);
-        $("calendarMonthTitle").textContent = new Date(year,mon-1,1).toLocaleDateString("ar-IQ",{month:"long",year:"numeric"});
-        const names = ["أحد","إثن","ثلا","أرب","خمي","جمع","سبت"];
-        let html = names.map(n=>`<div class="cal-day-name">${n}</div>`).join("");
-        for(let i=0;i<firstDay;i++) html += `<div></div>`;
-        for(let d=1;d<=days;d++) {
-          const key = `${selectedMonth}-${String(d).padStart(2,"0")}`;
-          const isToday = key===dateKey(new Date());
+        $("calendarMonthTitle").textContent = new Date(year, mon - 1, 1).toLocaleDateString("ar-IQ", { month: "long", year: "numeric" });
+
+        const names = ["أحد", "إثن", "ثلا", "أرب", "خمي", "جمع", "سبت"];
+        let html = names.map(n => `<div class="cal-day-name">${n}</div>`).join("");
+        for (let i = 0; i < firstDay; i++) html += `<div></div>`;
+
+        for (let d = 1; d <= days; d++) {
+          const key = `${selectedMonth}-${pad2(d)}`;
+          const isToday = key === dateKey(now());
           const holiday = data.holidays.includes(key);
-          const amount = sums[key]||0;
-          html += `<div class="cal-day ${isToday?"today":""} ${holiday?"holiday":""}">
+          const amount = sums[key] || 0;
+          html += `<div class="cal-day ${isToday ? "today" : ""} ${holiday ? "holiday" : ""}">
             ${d}
-            ${amount ? `<span class="cal-amount">${compact(amount)}</span>` : holiday ? `<span class="cal-dot" style="background:var(--orange)"></span>` : ""}
+            ${amount
+              ? `<span class="cal-amount">${compact(amount)}</span>`
+              : holiday ? `<span class="cal-dot" style="background:var(--orange)"></span>` : ""}
           </div>`;
         }
         $("calendarGrid").innerHTML = html;
-        const holidays = data.holidays.filter(d=>monthKey(d)===selectedMonth).sort();
-        $("holidayList").innerHTML = holidays.length ? holidays.map(d=>`<div class="setting-row"><span>${fmtDate(d)}</span><button class="tiny-btn" data-remove-holiday="${d}">إزالة</button></div>`).join("") : `<div class="muted" style="font-size:11px">لا توجد عطلات مسجلة.</div>`;
-      }
 
-      function compact(n) {
-        n=Number(n)||0;
-        if(n>=1000000) return (n/1000000).toFixed(1)+"م";
-        if(n>=1000) return (n/1000).toFixed(0)+"ك";
-        return n.toLocaleString("en-US");
+        const holidays = data.holidays.filter(d => monthKey(d) === selectedMonth).sort();
+        $("holidayList").innerHTML = holidays.length
+          ? holidays.map(d => `<div class="setting-row"><span>${fmtDate(d)}</span><button class="tiny-btn" data-remove-holiday="${d}">إزالة</button></div>`).join("")
+          : `<div class="muted" style="font-size:11px">لا توجد عطلات مسجلة.</div>`;
       }
 
       function renderAnalytics() {
@@ -1009,23 +1059,28 @@ function remainingWorkDays(month) {
         const total = sumTransactions(txs);
         const count = txs.length;
         const daily = dailySums(selectedMonth);
-        const best = Math.max(0,...Object.values(daily));
+        const best = Math.max(0, ...Object.values(daily));
         $("analyticsTotal").textContent = money(total);
         $("analyticsCount").textContent = count;
         $("analyticsBest").textContent = money(best);
-        $("analyticsAverage").textContent = money(count ? total/count : 0);
+        $("analyticsAverage").textContent = money(count ? total / count : 0);
 
         const months = [];
-        for(let i=5;i>=0;i--) {
-          const d = new Date(Number(selectedMonth.slice(0,4)),Number(selectedMonth.slice(5,7))-1-i,1);
-          const m = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}`;
-          months.push({month:m,total:sumTransactions(monthTransactions(m)),goal:mainGoal(m)?.amount||0});
+        for (let i = 5; i >= 0; i--) {
+          const d = new Date(Number(selectedMonth.slice(0, 4)), Number(selectedMonth.slice(5, 7)) - 1 - i, 1);
+          const m = `${d.getFullYear()}-${pad2(d.getMonth() + 1)}`;
+          months.push({
+            month: m,
+            total: sumTransactions(monthTransactions(m)),
+            goal: mainGoal(m)?.amount || 0
+          });
         }
-        $("monthlyComparison").innerHTML = months.map(x=>{
-          const p = x.goal ? Math.min(100,x.total/x.goal*100) : 0;
+
+        $("monthlyComparison").innerHTML = months.map(x => {
+          const p = x.goal ? Math.min(100, x.total / x.goal * 100) : 0;
           return `<div class="goal-item">
-                      <div class="goal-progress"><span style="width:${p}%"></span></div>
-            <div class="muted" style="font-size:10px;margin-top:5px">${x.goal ? p.toFixed(1)+"% من الهدف" : "لم يحدد هدف لهذا الشهر"}</div>
+            <div class="goal-progress"><span style="width:${p}%"></span></div>
+            <div class="muted" style="font-size:10px;margin-top:5px">${x.goal ? p.toFixed(1) + "% من الهدف" : "لم يحدد هدف لهذا الشهر"}</div>
           </div>`;
         }).join("");
       }
@@ -1034,98 +1089,144 @@ function remainingWorkDays(month) {
         renderDashboard();
         renderIncome();
         renderGoals();
+        renderDebts();
         renderCalendar();
         renderAnalytics();
         $("includeToday").checked = !!data.settings.includeToday;
         $("excludeHolidays").checked = !!data.settings.excludeHolidays;
         $("darkMode").checked = !!data.settings.darkMode;
-        document.body.classList.toggle("dark",!!data.settings.darkMode);
+        document.body.classList.toggle("dark", !!data.settings.darkMode);
         $("themeBtn").textContent = data.settings.darkMode ? "☀" : "☾";
       }
 
-      function escapeHTML(value) {
-        return String(value ?? "").replace(/[&<>"']/g, c => ({
-          "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
-        }[c]));
-      }
-
       function showView(name) {
-        document.querySelectorAll(".view").forEach(v=>v.classList.remove("active"));
-        document.querySelectorAll(".nav-item").forEach(v=>v.classList.toggle("active",v.dataset.view===name));
-        $(name+"View").classList.add("active");
-        window.scrollTo({top:0,behavior:"smooth"});
+        document.querySelectorAll(".view").forEach(v => v.classList.remove("active"));
+        document.querySelectorAll(".nav-item").forEach(v => v.classList.toggle("active", v.dataset.view === name));
+        $(name + "View").classList.add("active");
+        window.scrollTo({ top: 0, behavior: "smooth" });
         renderAll();
       }
       window.showView = showView;
 
-      document.querySelectorAll(".nav-item").forEach(btn=>btn.addEventListener("click",()=>showView(btn.dataset.view)));
-const incomeAmountSelect = $("incomeAmount");
+      document.querySelectorAll(".nav-item").forEach(btn =>
+        btn.addEventListener("click", () => showView(btn.dataset.view))
+      );
 
-for (let amount = 50000; amount <= 500000; amount += 5000) {
-  const option = document.createElement("option");
-  option.value = amount;
-  option.textContent = amount.toLocaleString("en-US") + " د.ع";
-  incomeAmountSelect.appendChild(option);
-}
+      /* ================= نموذج الدخل ================= */
 
-incomeAmountSelect.value = "50000";
+      const incomeAmountSelect = $("incomeAmount");
       const incomeAmountWheelList = $("incomeAmountWheelList");
+      const incomeAmountField = $("incomeAmountField");
+      const debtPaymentField = $("debtPaymentField");
+      const debtPaymentAmount = $("debtPaymentAmount");
+      const incomeCategory = $("incomeCategory");
 
-Array.from(incomeAmountSelect.options).forEach((option, index) => {
-  const item = document.createElement("div");
+      for (let amount = 50000; amount <= 500000; amount += 5000) {
+        const option = document.createElement("option");
+        option.value = amount;
+        option.textContent = amount.toLocaleString("en-US") + " د.ع";
+        incomeAmountSelect.appendChild(option);
+      }
+      incomeAmountSelect.value = "50000";
 
-  item.className = "amount-wheel-option";
-  item.textContent = option.textContent;
-  item.dataset.index = index;
-
-  incomeAmountWheelList.appendChild(item);
-});
-
-function updateIncomeAmountWheel() {
-  const index = Math.round(incomeAmountWheelList.scrollTop / 44);
-  const options = incomeAmountWheelList.querySelectorAll(".amount-wheel-option");
-
-  options.forEach((item, i) => {
-    item.classList.toggle("active", i === index);
-  });
-
-  if (incomeAmountSelect.options[index]) {
-    incomeAmountSelect.selectedIndex = index;
-  }
-}
-
-incomeAmountWheelList.addEventListener("scroll", () => {
-  updateIncomeAmountWheel();
-});
-
-incomeAmountWheelList.scrollTop = 0;
-updateIncomeAmountWheel();
-      $("monthPicker").value = selectedMonth;
-$("goalMonth").value = selectedMonth + "-01";
-      $("incomeDate").value = dateKey(new Date());
-
-      $("monthPicker").addEventListener("change",e=>{
-        if(!e.target.value) return;
-        selectedMonth = e.target.value;
-$("goalMonth").value = selectedMonth + "-01";
-        renderAll();
+      Array.from(incomeAmountSelect.options).forEach((option, index) => {
+        const item = document.createElement("div");
+        item.className = "amount-wheel-option";
+        item.textContent = option.textContent;
+        item.dataset.index = index;
+        incomeAmountWheelList.appendChild(item);
       });
 
-      $("incomeForm").addEventListener("submit",e=>{
+      function updateIncomeAmountWheel() {
+        const index = Math.round(incomeAmountWheelList.scrollTop / WHEEL_STEP_PX);
+        const options = incomeAmountWheelList.querySelectorAll(".amount-wheel-option");
+        options.forEach((item, i) => item.classList.toggle("active", i === index));
+        if (incomeAmountSelect.options[index]) {
+          incomeAmountSelect.selectedIndex = index;
+        }
+      }
+
+      incomeAmountWheelList.addEventListener("scroll", updateIncomeAmountWheel);
+      incomeAmountWheelList.scrollTop = 0;
+      updateIncomeAmountWheel();
+
+      // وضع تسديد الدين: يخفي عجلة الدخل ويُظهر حقلاً رقمياً مستقلاً
+      function setPaymentMode(on, transaction = null) {
+        incomeAmountField.classList.toggle("hidden", on);
+        incomeAmountSelect.disabled = on;
+        debtPaymentField.classList.toggle("hidden", !on);
+        debtPaymentAmount.disabled = !on;
+        incomeCategory.disabled = on;
+
+        if (on) {
+          incomeCategory.value = DEBT_CATEGORY;
+          debtPaymentAmount.value = transaction ? String(transaction.amount) : "";
+        } else {
+          incomeCategory.value = INCOME_CATEGORIES[0];
+          debtPaymentAmount.value = "";
+        }
+      }
+
+      function resetIncomeForm() {
+        $("incomeForm").reset();
+        $("editId").value = "";
+        setPaymentMode(false);
+        $("incomeDate").value = dateKey(now());
+        $("incomeSubmit").textContent = "＋ إضافة العملية";
+        $("cancelEdit").classList.add("hidden");
+        incomeAmountWheelList.scrollTop = 0;
+        updateIncomeAmountWheel();
+      }
+
+      $("cancelEdit").addEventListener("click", resetIncomeForm);
+
+      $("incomeForm").addEventListener("submit", e => {
         e.preventDefault();
-        const amount = Number($("incomeAmount").value);
-        const date = $("incomeDate").value;
-        if(!(amount>0) || !date) return alert("يرجى إدخال مبلغ وتاريخ صحيحين.");
+
         const id = $("editId").value;
-        const item = {
-          id:id||uid(), amount, date,
-          category:$("incomeCategory").value,
-          note:$("incomeNote").value.trim()
-        };
-        if(id) {
-          const index = data.transactions.findIndex(t=>t.id===id);
-          if(index>=0) data.transactions[index]=item;
-        } else data.transactions.push(item);
+        const date = $("incomeDate").value;
+        const note = $("incomeNote").value.trim();
+
+        if (!isValidDate(date)) return alert("يرجى اختيار تاريخ صحيح.");
+
+        const index = id ? data.transactions.findIndex(t => t.id === id) : -1;
+        const existing = index >= 0 ? data.transactions[index] : null;
+        let item;
+
+        if (existing && existing.category === DEBT_CATEGORY) {
+          // تعديل دفعة تسديد: مبلغ حقيقي بدون حد أدنى أو خطوة
+          const amount = parseAmount(debtPaymentAmount.value);
+          if (!Number.isInteger(amount) || amount <= 0) {
+            return alert("أدخل مبلغ تسديد صحيح أكبر من صفر.");
+          }
+
+          item = { ...existing, amount, date, note, category: DEBT_CATEGORY };
+
+          if (existing.debtId) {
+            const debt = data.debts.find(d => d.id === existing.debtId);
+            if (debt) {
+              const otherPaid = debtPaid(debt) - Number(existing.amount);
+              const allowed = Number(debt.amount) - otherPaid;
+              if (amount > allowed) {
+                return alert("المبلغ أكبر من المتبقي على هذا الدين (" + money(allowed) + ").");
+              }
+            } else {
+              delete item.debtId;
+            }
+          }
+        } else {
+          // عملية دخل عادية: مبلغ من العجلة
+          const amount = Number(incomeAmountSelect.value);
+          const category = incomeCategory.value;
+          if (!(amount > 0) || !INCOME_CATEGORIES.includes(category)) {
+            return alert("يرجى إدخال مبلغ وتصنيف صحيحين.");
+          }
+          item = { id: id || uid(), amount, date, category, note };
+        }
+
+        if (index >= 0) data.transactions[index] = item;
+        else data.transactions.push(item);
+
         selectedMonth = monthKey(date);
         $("monthPicker").value = selectedMonth;
         resetIncomeForm();
@@ -1133,85 +1234,74 @@ $("goalMonth").value = selectedMonth + "-01";
         showView("income");
       });
 
-function resetIncomeForm() {
-  $("incomeForm").reset();
-  $("editId").value = "";
-  $("incomeDate").value = dateKey(new Date());
-  $("incomeSubmit").textContent = "＋ إضافة العملية";
-  $("cancelEdit").classList.add("hidden");
+      /* ================= نموذج الأهداف ================= */
 
-  incomeAmountWheelList.scrollTop = 0;
-  updateIncomeAmountWheel();
+      function resetGoalForm() {
+        $("goalForm").reset();
+        $("goalEditId").value = "";
+        $("goalMonth").value = selectedMonth + "-01";
+        $("goalSubmit").textContent = "＋ إضافة هدف";
+        $("cancelGoalEdit").classList.add("hidden");
+      }
 
-}
-$("cancelEdit").addEventListener("click", resetIncomeForm);
+      $("cancelGoalEdit").addEventListener("click", resetGoalForm);
 
-$("goalForm").addEventListener("submit", e => {
-  e.preventDefault();
+      $("goalForm").addEventListener("submit", e => {
+        e.preventDefault();
 
-  const name = $("goalName").value.trim();
-  const amount = Number($("goalAmount").value);
-  const goalDate = $("goalMonth").value;
-  const month = monthKey(goalDate);
-  const id = $("goalEditId").value;
+        const name = $("goalName").value.trim();
+        const amount = Number($("goalAmount").value);
+        const goalDate = $("goalMonth").value;
+        const month = monthKey(goalDate);
+        const id = $("goalEditId").value;
 
-  if (!name || !(amount > 0) || !goalDate) {
-    return alert("يرجى إدخال اسم الهدف وقيمته والشهر بشكل صحيح.");
-  }
-
-  if (id) {
-    const g = data.goals.find(x => x.id === id);
-
-    if (g) {
-      const oldMonth = goalMonthKey(g);
-      const wasPrimary = !!g.primary;
-
-      Object.assign(g, { name, amount, month: goalDate });
-
-      if (oldMonth !== month && wasPrimary) {
-        const oldGoals = data.goals.filter(
-          x => goalMonthKey(x) === oldMonth && x.id !== id
-        );
-
-        oldGoals.forEach(x => x.primary = false);
-
-        if (oldGoals.length) {
-          oldGoals[0].primary = true;
+        if (!name || !(amount > 0) || !isValidDate(goalDate)) {
+          return alert("يرجى إدخال اسم الهدف وقيمته والشهر بشكل صحيح.");
         }
+
+        if (id) {
+          const g = data.goals.find(x => x.id === id);
+          if (g) {
+            const oldMonth = goalMonthKey(g);
+            const wasPrimary = !!g.primary;
+
+            Object.assign(g, { name, amount, month: goalDate });
+
+            if (oldMonth !== month && wasPrimary) {
+              const oldGoals = data.goals.filter(x => goalMonthKey(x) === oldMonth && x.id !== id);
+              oldGoals.forEach(x => { x.primary = false; });
+              if (oldGoals.length) oldGoals[0].primary = true;
+            }
+
+            const newGoals = data.goals.filter(x => goalMonthKey(x) === month);
+            const hasOtherPrimary = newGoals.some(x => x.id !== id && x.primary);
+
+            if (wasPrimary || !hasOtherPrimary) {
+              newGoals.forEach(x => { x.primary = x.id === id; });
+            }
+          }
+        } else {
+          const first = !data.goals.some(g => goalMonthKey(g) === month && g.primary);
+          data.goals.push({ id: uid(), name, amount, month: goalDate, primary: first });
+        }
+
+        selectedMonth = month;
+        $("monthPicker").value = month;
+        resetGoalForm();
+        save();
+      });
+
+      /* ================= نموذج الديون ================= */
+
+      function resetDebtForm() {
+        $("debtForm").reset();
+        debtEditId = "";
+        $("debtEditId").value = "";
+        $("debtSubmit").textContent = "＋ إضافة دين";
+        $("cancelDebtEdit").classList.add("hidden");
       }
 
-      const newGoals = data.goals.filter(
-        x => goalMonthKey(x) === month
-      );
-
-      const hasOtherPrimary = newGoals.some(
-        x => x.id !== id && x.primary
-      );
-
-      if (wasPrimary || !hasOtherPrimary) {
-        newGoals.forEach(x => x.primary = x.id === id);
-      }
-    }
-  } else {
-    const first = !data.goals.some(
-      g => goalMonthKey(g) === month && g.primary
-    );
-
-    data.goals.push({
-      id: uid(),
-      name,
-      amount,
-      month: goalDate,
-      primary: first
-    });
-  }
-
-  selectedMonth = month;
-  $("monthPicker").value = month;
-  resetGoalForm();
-  save();
-});
-      let debtEditId = "";
+      $("cancelDebtEdit").addEventListener("click", resetDebtForm);
 
       $("debtForm").addEventListener("submit", e => {
         e.preventDefault();
@@ -1223,19 +1313,21 @@ $("goalForm").addEventListener("submit", e => {
 
         if (debtEditId) {
           const debt = data.debts.find(d => d.id === debtEditId);
-          if (!debt) return;
-
-          if (amount < Number(debt.paid || 0)) {
-            return alert("لا يمكن أن يكون مبلغ الدين أقل من المبلغ المسدد سابقاً.");
+          if (!debt) {
+            resetDebtForm();
+            return;
           }
-
+          const paid = debtPaid(debt);
+          if (amount < paid) {
+            return alert("لا يمكن أن يكون مبلغ الدين أقل من المبلغ المسدد (" + money(paid) + ").");
+          }
           debt.amount = amount;
         } else {
           data.debts.push({
             id: uid(),
             amount,
-            paid: 0,
-            date: dateKey(new Date())
+            legacyPaid: 0,
+            date: dateKey(now())
           });
         }
 
@@ -1243,57 +1335,55 @@ $("goalForm").addEventListener("submit", e => {
         save();
       });
 
-      function resetDebtForm() {
-        $("debtForm").reset();
-        debtEditId = "";
-        $("debtEditId").value = "";
-        $("debtSubmit").textContent = "＋ إضافة دين";
-        $("cancelDebtEdit").classList.add("hidden");
-      }
+      /* ================= الأزرار والعمليات ================= */
 
-      $("cancelDebtEdit").addEventListener("click", resetDebtForm);
-      function resetGoalForm() {
-        $("goalForm").reset();
-        $("goalEditId").value="";
-$("goalMonth").value=selectedMonth + "-01";
-        $("goalSubmit").textContent="＋ إضافة هدف";
-        $("cancelGoalEdit").classList.add("hidden");
-      }
-      $("cancelGoalEdit").addEventListener("click",resetGoalForm);
-
-      document.addEventListener("click",e=>{
-                const payDebt = e.target.closest("[data-pay-debt]");
+      document.addEventListener("click", e => {
+        const payDebt = e.target.closest("[data-pay-debt]");
         const editDebt = e.target.closest("[data-edit-debt]");
         const deleteDebt = e.target.closest("[data-delete-debt]");
-        const editTx=e.target.closest("[data-edit-tx]");
-        const deleteTx=e.target.closest("[data-delete-tx]");
-        const editGoal=e.target.closest("[data-edit-goal]");
-        const deleteGoal=e.target.closest("[data-delete-goal]");
-        const primaryGoal=e.target.closest("[data-primary-goal]");
-        const removeHoliday=e.target.closest("[data-remove-holiday]");
+        const editTx = e.target.closest("[data-edit-tx]");
+        const deleteTx = e.target.closest("[data-delete-tx]");
+        const editGoal = e.target.closest("[data-edit-goal]");
+        const deleteGoal = e.target.closest("[data-delete-goal]");
+        const primaryGoal = e.target.closest("[data-primary-goal]");
+        const removeHoliday = e.target.closest("[data-remove-holiday]");
 
-        if(editTx) {
-          const t=data.transactions.find(x=>x.id===editTx.dataset.editTx);
-          if(!t) return;
-          $("editId").value=t.id;
-$("incomeAmount").value = String(t.amount);
+        if (editTx) {
+          const t = data.transactions.find(x => x.id === editTx.dataset.editTx);
+          if (!t) return;
 
-const amountIndex = Array.from(incomeAmountSelect.options)
-  .findIndex(option => Number(option.value) === Number(t.amount));
+          const isPayment = t.category === DEBT_CATEGORY;
 
-if (amountIndex >= 0) {
-  incomeAmountWheelList.scrollTop = amountIndex * 44;
-  updateIncomeAmountWheel();
-}
-          $("incomeDate").value=t.date;
-          $("incomeCategory").value=t.category;
-          $("incomeNote").value=t.note||"";
-          $("incomeSubmit").textContent="حفظ التعديلات";
+          if (!isPayment) {
+            const amountIndex = Array.from(incomeAmountSelect.options)
+              .findIndex(option => Number(option.value) === Number(t.amount));
+            if (amountIndex < 0) {
+              return alert("مبلغ هذه العملية خارج نطاق عجلة الدخل، لذلك لا يمكن تعديله. يمكنك حذفها وإعادة إدخالها.");
+            }
+          }
+
+          setPaymentMode(isPayment, t);
+          $("editId").value = t.id;
+
+          if (!isPayment) {
+            incomeCategory.value = t.category;
+            const amountIndex = Array.from(incomeAmountSelect.options)
+              .findIndex(option => Number(option.value) === Number(t.amount));
+            incomeAmountSelect.selectedIndex = amountIndex;
+            incomeAmountWheelList.scrollTop = amountIndex * WHEEL_STEP_PX;
+            updateIncomeAmountWheel();
+          }
+
+          $("incomeDate").value = t.date;
+          $("incomeNote").value = t.note || "";
+          $("incomeSubmit").textContent = "حفظ التعديلات";
           $("cancelEdit").classList.remove("hidden");
           showView("income");
-          $("incomeAmount").focus();
+
+          if (isPayment) debtPaymentAmount.focus();
         }
-                if(editDebt) {
+
+        if (editDebt) {
           const debt = data.debts.find(d => d.id === editDebt.dataset.editDebt);
           if (!debt) return;
 
@@ -1302,233 +1392,275 @@ if (amountIndex >= 0) {
           $("debtAmount").value = debt.amount;
           $("debtSubmit").textContent = "حفظ تعديلات الدين";
           $("cancelDebtEdit").classList.remove("hidden");
-
-          document.getElementById("debtForm").scrollIntoView({
-            behavior: "smooth",
-            block: "center"
-          });
+          $("debtForm").scrollIntoView({ behavior: "smooth", block: "center" });
         }
 
-        if(deleteDebt && confirm("هل تريد حذف هذا الدين؟")) {
+        if (deleteDebt && confirm("هل تريد حذف هذا الدين؟ ستبقى دفعات التسديد السابقة ضمن الإيرادات.")) {
           const id = deleteDebt.dataset.deleteDebt;
+          // فصل دفعات التسديد عن الدين المحذوف مع إبقائها كإيرادات
+          data.transactions.forEach(t => {
+            if (t.debtId === id) delete t.debtId;
+          });
           data.debts = data.debts.filter(d => d.id !== id);
           resetDebtForm();
           save();
         }
-                if(payDebt) {
+
+        if (payDebt) {
           const debt = data.debts.find(d => d.id === payDebt.dataset.payDebt);
           if (!debt) return;
 
-          const remaining = Number(debt.amount) - Number(debt.paid || 0);
+          const remaining = debtRemaining(debt);
           if (remaining <= 0) return;
 
-          const input = prompt(
-            "المبلغ المراد تسديده:\nالمتبقي: " + money(remaining)
-          );
-
+          const input = prompt("المبلغ المراد تسديده:\nالمتبقي: " + money(remaining));
           if (input === null) return;
 
-          const payment = Number(input);
-
+          const payment = parseAmount(input);
           if (!Number.isInteger(payment) || payment <= 0) {
-            return alert("أدخل مبلغاً صحيحاً.");
+            return alert("أدخل مبلغاً صحيحاً أكبر من صفر.");
           }
-
           if (payment > remaining) {
             return alert("المبلغ أكبر من الدين المتبقي.");
           }
 
-          debt.paid = Number(debt.paid || 0) + payment;
-
           data.transactions.push({
             id: uid(),
             amount: payment,
-            date: dateKey(new Date()),
-            category: "تسديد دين",
-            note: "تسديد دين"
+            date: dateKey(now()),
+            category: DEBT_CATEGORY,
+            note: "تسديد دين",
+            debtId: debt.id
           });
 
           selectedMonth = currentMonth();
           $("monthPicker").value = selectedMonth;
+          save();
+        }
 
-          save();
+        if (deleteTx) {
+          const t = data.transactions.find(x => x.id === deleteTx.dataset.deleteTx);
+          const message = t && t.debtId
+            ? "هل تريد حذف دفعة التسديد؟ سيعود مبلغها إلى المتبقي على الدين."
+            : "هل تريد حذف هذه العملية؟";
+          if (t && confirm(message)) {
+            data.transactions = data.transactions.filter(x => x.id !== t.id);
+            save();
+          }
         }
-        if(deleteTx && confirm("هل تريد حذف هذه العملية؟")) {
-          data.transactions=data.transactions.filter(t=>t.id!==deleteTx.dataset.deleteTx);
-          save();
-        }
-        if(editGoal) {
-          const g=data.goals.find(x=>x.id===editGoal.dataset.editGoal);
-          if(!g) return;
-          $("goalEditId").value=g.id;
-          $("goalName").value=g.name;
-          $("goalAmount").value=g.amount;
-$("goalMonth").value = g.month.length === 7
-  ? g.month + "-01"
-  : g.month;
-          $("goalSubmit").textContent="حفظ تعديلات الهدف";
+
+        if (editGoal) {
+          const g = data.goals.find(x => x.id === editGoal.dataset.editGoal);
+          if (!g) return;
+          $("goalEditId").value = g.id;
+          $("goalName").value = g.name;
+          $("goalAmount").value = g.amount;
+          $("goalMonth").value = g.month.length === 7 ? g.month + "-01" : g.month;
+          $("goalSubmit").textContent = "حفظ تعديلات الهدف";
           $("cancelGoalEdit").classList.remove("hidden");
-          window.scrollTo({top:0,behavior:"smooth"});
+          window.scrollTo({ top: 0, behavior: "smooth" });
         }
-        if(deleteGoal && confirm("هل تريد حذف هذا الهدف؟")) {
-          const id=deleteGoal.dataset.deleteGoal;
-          const wasPrimary=data.goals.find(g=>g.id===id)?.primary;
-          data.goals=data.goals.filter(g=>g.id!==id);
-          if(wasPrimary) {
-const next=data.goals.find(g=>goalMonthKey(g)===selectedMonth);
-            if(next) next.primary=true;
+
+        if (deleteGoal && confirm("هل تريد حذف هذا الهدف؟")) {
+          const id = deleteGoal.dataset.deleteGoal;
+          const wasPrimary = data.goals.find(g => g.id === id)?.primary;
+          data.goals = data.goals.filter(g => g.id !== id);
+          if (wasPrimary) {
+            const next = data.goals.find(g => goalMonthKey(g) === selectedMonth);
+            if (next) next.primary = true;
           }
           save();
         }
-        if(primaryGoal) {
-          const id=primaryGoal.dataset.primaryGoal;
-data.goals.filter(g=>goalMonthKey(g)===selectedMonth).forEach(g=>g.primary=g.id===id);
+
+        if (primaryGoal) {
+          const id = primaryGoal.dataset.primaryGoal;
+          data.goals
+            .filter(g => goalMonthKey(g) === selectedMonth)
+            .forEach(g => { g.primary = g.id === id; });
           save();
         }
-        if(removeHoliday) {
-          data.holidays=data.holidays.filter(d=>d!==removeHoliday.dataset.removeHoliday);
+
+        if (removeHoliday) {
+          data.holidays = data.holidays.filter(d => d !== removeHoliday.dataset.removeHoliday);
           save();
         }
       });
 
-      $("addHoliday").addEventListener("click",()=>{
-        const d=$("holidayDate").value;
-        if(!d) return alert("اختر تاريخ العطلة أولاً.");
-        if(!data.holidays.includes(d)) data.holidays.push(d);
-        save();
-        $("holidayDate").value="";
-      });
+      /* ================= العطلات والإعدادات ================= */
 
-      $("includeToday").addEventListener("change",e=>{data.settings.includeToday=e.target.checked;save();});
-      $("excludeHolidays").addEventListener("change",e=>{data.settings.excludeHolidays=e.target.checked;save();});
-      $("darkMode").addEventListener("change",e=>{data.settings.darkMode=e.target.checked;save();});
-      $("themeBtn").addEventListener("click",()=>{
-        data.settings.darkMode=!data.settings.darkMode;
+      $("addHoliday").addEventListener("click", () => {
+        const d = $("holidayDate").value;
+        if (!isValidDate(d)) return alert("اختر تاريخ العطلة أولاً.");
+        if (!data.holidays.includes(d)) data.holidays.push(d);
+        $("holidayDate").value = "";
         save();
       });
 
-      $("exportData").addEventListener("click",()=>{
-        const blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});
-        const url=URL.createObjectURL(blob);
-        const a=document.createElement("a");
-        a.href=url;a.download=`target-backup-${dateKey(new Date())}.json`;
-        a.click();URL.revokeObjectURL(url);
+      $("includeToday").addEventListener("change", e => {
+        data.settings.includeToday = e.target.checked;
+        save();
+      });
+      $("excludeHolidays").addEventListener("change", e => {
+        data.settings.excludeHolidays = e.target.checked;
+        save();
+      });
+      $("darkMode").addEventListener("change", e => {
+        data.settings.darkMode = e.target.checked;
+        save();
+      });
+      $("themeBtn").addEventListener("click", () => {
+        data.settings.darkMode = !data.settings.darkMode;
+        save();
+      });
+
+      /* ================= النسخ الاحتياطي ================= */
+
+      $("exportData").addEventListener("click", () => {
+        const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `target-backup-${dateKey(now())}.json`;
+        a.click();
+        URL.revokeObjectURL(url);
       });
 
       function validateImportedData(imported) {
-        const isObject = value =>
-          value !== null &&
-          typeof value === "object" &&
-          !Array.isArray(value);
-
-        const validDate = value => {
-          if (typeof value !== "string" ||
-              !/^\d{4}-\d{2}-\d{2}$/.test(value)) return false;
-
-          const [y, m, d] = value.split("-").map(Number);
-          const date = new Date(y, m - 1, d);
-
-          return date.getFullYear() === y &&
-            date.getMonth() === m - 1 &&
-            date.getDate() === d;
-        };
-
-        const validMonth = value =>
-          typeof value === "string" &&
-          (/^\d{4}-(0[1-9]|1[0-2])$/.test(value) ||
-           validDate(value));
         if (!isObject(imported)) return false;
 
-        if (!Array.isArray(imported.transactions) ||
-            !Array.isArray(imported.goals) ||
-            !Array.isArray(imported.holidays)) return false;
-
-        if (imported.settings !== undefined &&
-            !isObject(imported.settings)) return false;
+        if (!Array.isArray(imported.transactions) || !Array.isArray(imported.goals)) return false;
+        if (imported.holidays !== undefined && !Array.isArray(imported.holidays)) return false;
+        if (imported.debts !== undefined && !Array.isArray(imported.debts)) return false;
+        if (imported.settings !== undefined && !isObject(imported.settings)) return false;
 
         const settings = imported.settings || {};
+        for (const key of ["includeToday", "excludeHolidays", "darkMode"]) {
+          if (settings[key] !== undefined && typeof settings[key] !== "boolean") return false;
+        }
 
-        for (const key of [
-          "includeToday",
-          "excludeHolidays",
-          "darkMode"
-        ]) {
-          if (settings[key] !== undefined &&
-              typeof settings[key] !== "boolean") return false;
+        const idPattern = /^[A-Za-z0-9_-]{1,100}$/;
+        const debts = imported.debts || [];
+
+        const debtIds = new Set();
+        for (const d of debts) {
+          if (!isObject(d) ||
+              typeof d.id !== "string" ||
+              !idPattern.test(d.id) ||
+              debtIds.has(d.id) ||
+              !Number.isInteger(d.amount) ||
+              d.amount <= 0 ||
+              !isValidDate(d.date) ||
+              (d.paid !== undefined && (!Number.isFinite(d.paid) || d.paid < 0)) ||
+              (d.legacyPaid !== undefined && (!Number.isFinite(d.legacyPaid) || d.legacyPaid < 0))) {
+            return false;
+          }
+          debtIds.add(d.id);
         }
 
         const transactionIds = new Set();
-
         for (const t of imported.transactions) {
           if (!isObject(t) ||
-
               typeof t.id !== "string" ||
-              !/^[A-Za-z0-9_-]{1,100}$/.test(t.id) ||
+              !idPattern.test(t.id) ||
               transactionIds.has(t.id) ||
               !Number.isFinite(t.amount) ||
-              t.amount < 50000 ||
-              t.amount > 500000 ||
-              (t.amount - 50000) % 5000 !== 0 ||
-              !validDate(t.date) ||
-              !["مبيعات", "عمولة", "دخل إضافي", "أخرى"].includes(t.category) ||
+              !isValidDate(t.date) ||
               (t.note !== undefined && typeof t.note !== "string")) {
             return false;
+          }
+
+          if (t.category === DEBT_CATEGORY) {
+            // دفعات التسديد: مبلغ صحيح موجب بدون حد أدنى أو خطوة
+            if (!Number.isInteger(t.amount) || t.amount <= 0) return false;
+          } else {
+            // الدخل العادي: يخضع لعجلة الدخل
+            if (!INCOME_CATEGORIES.includes(t.category) ||
+                t.amount < 50000 ||
+                t.amount > 500000 ||
+                (t.amount - 50000) % 5000 !== 0) {
+              return false;
+            }
+          }
+
+          if (t.debtId !== undefined) {
+            // debtId مسموح فقط على دفعات التسديد؛ المعرف غير الموجود يُزال لاحقاً
+            if (t.category !== DEBT_CATEGORY || typeof t.debtId !== "string") return false;
           }
 
           transactionIds.add(t.id);
         }
 
-        const goalIds = new Set();
+        // التحقق من أرصدة الديون: لا يجوز أن يتجاوز المسدد مبلغ الدين الأصلي
+        for (const d of debts) {
+          const linked = imported.transactions
+            .filter(t => t.debtId === d.id)
+            .reduce((s, t) => s + t.amount, 0);
+          const legacy = d.legacyPaid !== undefined
+            ? Number(d.legacyPaid)
+            : Math.max(0, Number(d.paid || 0) - linked);
+          if (legacy + linked > d.amount) return false;
+        }
 
+        const goalIds = new Set();
         for (const g of imported.goals) {
           if (!isObject(g) ||
               typeof g.id !== "string" ||
-              !/^[A-Za-z0-9_-]{1,100}$/.test(g.id) ||
+              !idPattern.test(g.id) ||
               goalIds.has(g.id) ||
               typeof g.name !== "string" ||
               !g.name.trim() ||
               g.name.length > 50 ||
               !Number.isFinite(g.amount) ||
               g.amount <= 0 ||
-              !validMonth(g.month) ||
-              (g.primary !== undefined &&
-               typeof g.primary !== "boolean")) {
+              typeof g.month !== "string" ||
+              !(/^\d{4}-(0[1-9]|1[0-2])$/.test(g.month) || isValidDate(g.month)) ||
+              (g.primary !== undefined && typeof g.primary !== "boolean")) {
             return false;
           }
-
           goalIds.add(g.id);
         }
 
-        for (const holiday of imported.holidays) {
-          if (!validDate(holiday)) return false;
+        for (const holiday of (imported.holidays || [])) {
+          if (!isValidDate(holiday)) return false;
         }
 
         return true;
       }
 
-      $("importFile").addEventListener("change",async e=>{
-        const file=e.target.files[0];
-        if(!file) return;
+      $("importFile").addEventListener("change", async e => {
+        const file = e.target.files[0];
+        if (!file) return;
 
         try {
-          const imported=JSON.parse(await file.text());
+          const imported = JSON.parse(await file.text());
 
-          if(!validateImportedData(imported)) {
+          if (!validateImportedData(imported)) {
             throw new Error("Invalid backup data");
           }
 
-          if(!confirm("سيتم استبدال البيانات الحالية بالنسخة المستوردة. هل تريد المتابعة؟")) return;
+          if (!confirm("سيتم استبدال البيانات الحالية بالنسخة المستوردة. هل تريد المتابعة؟")) return;
+
+          const debtIds = new Set((imported.debts || []).map(d => d.id));
+          const transactions = imported.transactions.map(t => {
+            if (t.debtId !== undefined && !debtIds.has(t.debtId)) {
+              const cleaned = { ...t };
+              delete cleaned.debtId;
+              return cleaned;
+            }
+            return { ...t };
+          });
 
           const previousData = data;
 
           data = {
-            transactions: imported.transactions,
+            transactions,
             goals: imported.goals,
-            holidays: [...new Set(imported.holidays)],
+            debts: normalizeDebts(imported.debts || [], transactions),
+            holidays: [...new Set(imported.holidays || [])],
             settings: {
-              includeToday:true,
-              excludeHolidays:true,
-              darkMode:false,
+              includeToday: true,
+              excludeHolidays: true,
+              darkMode: false,
               ...(imported.settings || {})
             }
           };
@@ -1540,45 +1672,61 @@ data.goals.filter(g=>goalMonthKey(g)===selectedMonth).forEach(g=>g.primary=g.id=
           }
 
           alert("تم استيراد النسخة الاحتياطية بنجاح.");
-
-        } catch(err) {
+        } catch (err) {
           console.error("فشل استيراد النسخة الاحتياطية:", err);
           alert("الملف غير صالح أو يحتوي على بيانات غير مكتملة أو تالفة.");
         } finally {
-          e.target.value="";
+          e.target.value = "";
         }
       });
-      $("clearData").addEventListener("click",()=>{
-        if(!confirm("تحذير: سيتم حذف جميع الأهداف والإيرادات والعطلات نهائياً من هذا الجهاز. هل أنت متأكد؟")) return;
-        if(!confirm("تأكيد أخير: هل أنشأت نسخة احتياطية قبل الحذف؟")) return;
-        data={transactions:[],goals:[],holidays:[],settings:{includeToday:true,excludeHolidays:true,darkMode:false}};
+
+      $("clearData").addEventListener("click", () => {
+        if (!confirm("تحذير: سيتم حذف جميع الأهداف والإيرادات والديون والعطلات نهائياً من هذا الجهاز. هل أنت متأكد؟")) return;
+        if (!confirm("تأكيد أخير: هل أنشأت نسخة احتياطية قبل الحذف؟")) return;
+
+        data = emptyData();
+        resetIncomeForm();
+        resetGoalForm();
+        resetDebtForm();
         save();
       });
 
-      $("enableNotifications").addEventListener("click",async()=>{
-        if(!("Notification" in window)) return alert("هذا المتصفح لا يدعم الإشعارات.");
-        const permission=await Notification.requestPermission();
-        if(permission==="granted") {
-          new Notification("Target",{body:"تم تفعيل الإشعارات. تذكّر تسجيل دخلك اليومي."});
+      $("enableNotifications").addEventListener("click", async () => {
+        if (!("Notification" in window)) return alert("هذا المتصفح لا يدعم الإشعارات.");
+        const permission = await Notification.requestPermission();
+        if (permission === "granted") {
+          new Notification("Target", { body: "تم تفعيل الإشعارات. تذكّر تسجيل دخلك اليومي." });
           alert("تم السماح بالإشعارات. التذكير المجدول يحتاج إلى دعم إضافي من النظام.");
-        } else alert("لم يتم منح إذن الإشعارات.");
+        } else {
+          alert("لم يتم منح إذن الإشعارات.");
+        }
+      });
+
+      $("monthPicker").value = selectedMonth;
+      $("goalMonth").value = selectedMonth + "-01";
+      $("incomeDate").value = dateKey(now());
+
+      $("monthPicker").addEventListener("change", e => {
+        if (!e.target.value) return;
+        selectedMonth = e.target.value;
+        $("goalMonth").value = selectedMonth + "-01";
+        renderAll();
       });
 
       renderAll();
     })();
   </script>
 
-<script>
-  if ("serviceWorker" in navigator) {
-    window.addEventListener("load", () => {
-      navigator.serviceWorker
-        .register("./sw.js")
-        .catch(error => {
-          console.error("Service Worker registration failed:", error);
-        });
-    });
-  }
-</script>
-
+  <script>
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", () => {
+        navigator.serviceWorker
+          .register("./sw.js")
+          .catch(error => {
+            console.error("Service Worker registration failed:", error);
+          });
+      });
+    }
+  </script>
 </body>
 </html>
