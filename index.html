@@ -318,7 +318,6 @@
     }
   </style>
 </head>
-
 <body>
   <div class="app">
     <header class="topbar">
@@ -659,7 +658,6 @@
     <button class="nav-item" data-view="analytics"><span class="nav-icon">▥</span><span>الإحصائيات</span></button>
     <button class="nav-item" data-view="settings"><span class="nav-icon">⚙</span><span>الإعدادات</span></button>
   </nav>
-
   <script>
     (() => {
       "use strict";
@@ -705,6 +703,11 @@
         holidays: [],
         settings: { includeToday: true, excludeHolidays: true, darkMode: false }
       });
+
+      // الدفعة المدرجة ضمن دخل اليوم لا تُحسب مرة ثانية في الإيرادات
+      function incomeAmount(t) {
+        return t.excludeFromIncome === true ? 0 : Number(t.amount || 0);
+      }
 
       function sumLinked(transactions, debtId) {
         return transactions
@@ -800,13 +803,13 @@
       }
 
       function sumTransactions(list) {
-        return list.reduce((s, t) => s + Number(t.amount || 0), 0);
+        return list.reduce((s, t) => s + incomeAmount(t), 0);
       }
 
       function dailySums(month) {
         const result = {};
         monthTransactions(month).forEach(t => {
-          result[t.date] = (result[t.date] || 0) + Number(t.amount || 0);
+          result[t.date] = (result[t.date] || 0) + incomeAmount(t);
         });
         return result;
       }
@@ -862,7 +865,7 @@
         const days = remainingWorkDays(month);
         const daily = days ? remaining / days : 0;
         const percent = goalValue ? Math.min(100, earned / goalValue * 100) : 0;
-        const activeDays = new Set(txs.map(t => t.date)).size;
+        const activeDays = Object.values(dailySums(selectedMonth)).filter(v => v > 0).length;
         const average = activeDays ? earned / activeDays : 0;
 
         $("heroEarned").textContent = money(earned);
@@ -1057,7 +1060,7 @@
       function renderAnalytics() {
         const txs = monthTransactions(selectedMonth);
         const total = sumTransactions(txs);
-        const count = txs.length;
+        const count = txs.filter(t => incomeAmount(t) > 0).length;
         const daily = dailySums(selectedMonth);
         const best = Math.max(0, ...Object.values(daily));
         $("analyticsTotal").textContent = money(total);
@@ -1362,6 +1365,9 @@
             }
           }
 
+          // تصحيح الخطأ 3: إظهار التبويب أولاً حتى تعمل العجلة بشكل صحيح
+          showView("income");
+
           setPaymentMode(isPayment, t);
           $("editId").value = t.id;
 
@@ -1378,7 +1384,6 @@
           $("incomeNote").value = t.note || "";
           $("incomeSubmit").textContent = "حفظ التعديلات";
           $("cancelEdit").classList.remove("hidden");
-          showView("income");
 
           if (isPayment) debtPaymentAmount.focus();
         }
@@ -1424,13 +1429,21 @@
             return alert("المبلغ أكبر من الدين المتبقي.");
           }
 
+          // خيار جديد: هل المبلغ مدرج ضمن دخل اليوم؟
+          const includedInIncome = confirm(
+            "هل هذا المبلغ مدرج ضمن إجمالي دخل اليوم؟\n\n" +
+            "«موافق»: جزء من الإجمالي (لا يُحسب مرتين)\n" +
+            "«إلغاء»: مبلغ إضافي (يُضاف إلى الإجمالي)"
+          );
+
           data.transactions.push({
             id: uid(),
             amount: payment,
             date: dateKey(now()),
             category: DEBT_CATEGORY,
             note: "تسديد دين",
-            debtId: debt.id
+            debtId: debt.id,
+            excludeFromIncome: includedInIncome
           });
 
           selectedMonth = currentMonth();
@@ -1585,6 +1598,11 @@
           if (t.debtId !== undefined) {
             // debtId مسموح فقط على دفعات التسديد؛ المعرف غير الموجود يُزال لاحقاً
             if (t.category !== DEBT_CATEGORY || typeof t.debtId !== "string") return false;
+          }
+
+          if (t.excludeFromIncome !== undefined &&
+              (t.category !== DEBT_CATEGORY || typeof t.excludeFromIncome !== "boolean")) {
+            return false;
           }
 
           transactionIds.add(t.id);
