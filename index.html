@@ -1683,14 +1683,29 @@
 
       /* ================= النسخ الاحتياطي ================= */
 
-      $("exportData").addEventListener("click", () => {
-        const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
-        const url = URL.createObjectURL(blob);
+      // يفتح نافذة المشاركة مباشرة (لاختصار "Target Backup" أو "حفظ في الملفات")
+      // وإذا لم يدعم المتصفح مشاركة الملفات يرجع للتنزيل العادي
+      $("exportData").addEventListener("click", async () => {
+        const fileName = `target-backup-${dateKey(now())}.json`;
+        const content = JSON.stringify(data, null, 2);
+        const file = new File([content], fileName, { type: "application/json" });
+
+        if (navigator.canShare && navigator.canShare({ files: [file] })) {
+          try {
+            await navigator.share({ files: [file], title: fileName });
+            return;
+          } catch (err) {
+            if (err && err.name === "AbortError") return;
+            console.warn("فشلت المشاركة، سيتم التنزيل بدلاً منها", err);
+          }
+        }
+
+        const url = URL.createObjectURL(file);
         const a = document.createElement("a");
         a.href = url;
-        a.download = `target-backup-${dateKey(now())}.json`;
+        a.download = fileName;
         a.click();
-        URL.revokeObjectURL(url);
+        setTimeout(() => URL.revokeObjectURL(url), 1000);
       });
 
       function validateImportedData(imported) {
