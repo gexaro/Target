@@ -356,10 +356,15 @@
           <input class="month-picker" type="month" id="monthPicker">
         </div>
 
+        <div class="field">
+          <label for="goalSelect">الهدف المعروض</label>
+          <select id="goalSelect"></select>
+        </div>
+
         <div class="hero">
           <div class="hero-label">إجمالي الدخل المحقق</div>
           <div class="hero-amount" id="heroEarned">0</div>
-          <div class="hero-caption">من الهدف الشهري المحدد</div>
+          <div class="hero-caption" id="heroCaption">أضف هدفاً لعرض الحسابات</div>
           <div class="progress-track"><div class="progress-fill" id="mainProgress"></div></div>
           <div class="progress-meta">
             <span id="progressPercent">0% من الهدف</span>
@@ -369,7 +374,7 @@
 
         <div class="stats-grid">
           <div class="stat-card">
-            <div class="stat-head"><span class="stat-icon" style="background:var(--blue-soft)">🎯</span> الهدف الشهري</div>
+            <div class="stat-head"><span class="stat-icon" style="background:var(--blue-soft)">🎯</span> قيمة الهدف</div>
             <div class="stat-value" id="statGoal">0</div>
             <div class="stat-note">المبلغ المطلوب تحقيقه</div>
           </div>
@@ -420,7 +425,7 @@
         </div>
 
         <div class="section">
-          <div class="section-head"><div class="section-title">توقع نهاية الشهر</div></div>
+          <div class="section-head"><div class="section-title">توقع نهاية الفترة</div></div>
           <div class="panel">
             <div class="daily-top">
               <div>
@@ -494,21 +499,21 @@
       <!-- الأهداف -->
       <section class="view" id="goalsView">
         <div class="page-title">إدارة الأهداف</div>
-        <div class="page-subtitle">حدد هدفك الأساسي وأضف أهدافاً أخرى لمتابعتها.</div>
+        <div class="page-subtitle">حدد هدفاً بتاريخ بدايته وقيمته، وأضف أهدافاً أخرى متى أردت.</div>
 
         <div class="panel">
           <form id="goalForm">
             <input type="hidden" id="goalEditId">
             <div class="field">
               <label for="goalName">اسم الهدف</label>
-              <input id="goalName" type="text" maxlength="50" placeholder="مثلاً: التارگت الشهري" required>
+              <input id="goalName" type="text" maxlength="50" placeholder="مثلاً: التارگت الأول" required>
             </div>
             <div class="field">
               <label for="goalAmount">قيمة الهدف (دينار عراقي)</label>
               <input id="goalAmount" type="number" min="0" step="any" placeholder="4000000" required>
             </div>
             <div class="field">
-              <label for="goalMonth">الشهر</label>
+              <label for="goalMonth">تاريخ بداية الهدف</label>
               <input id="goalMonth" type="date" required>
             </div>
             <button class="primary-btn full-btn" type="submit" id="goalSubmit">＋ إضافة هدف</button>
@@ -555,7 +560,7 @@
           </div>
         </div>
 
-        <div class="notice">الهدف الأساسي هو الذي يُستخدم لحساب التارگت اليومي. يمكنك تغيير الهدف الأساسي من قائمة الأهداف.</div>
+        <div class="notice">لكل هدف حساباته المستقلة وفق تاريخ بدايته حتى نهاية شهره. اختر الهدف المعروض من الصفحة الرئيسية. سجل الدخل واحد ويُستخدم لجميع الأهداف.</div>
       </section>
 
       <!-- التقويم -->
@@ -672,6 +677,7 @@
     <button class="nav-item" data-view="analytics"><span class="nav-icon">▥</span><span>الإحصائيات</span></button>
     <button class="nav-item" data-view="settings"><span class="nav-icon">⚙</span><span>الإعدادات</span></button>
   </nav>
+
   <script>
     (() => {
       "use strict";
@@ -680,6 +686,7 @@
       const DEBT_CATEGORY = "تسديد دين";
       const INCOME_CATEGORIES = ["مبيعات", "عمولة", "دخل إضافي", "أخرى"];
       const WHEEL_STEP_PX = 44;
+      const DAY_MS = 86400000;
 
       const $ = id => document.getElementById(id);
       const pad2 = n => String(n).padStart(2, "0");
@@ -767,7 +774,9 @@
       let data = loadData();
       let lastSavedData = JSON.stringify(data);
       let selectedMonth = currentMonth();
+      let lastKnownMonth = currentMonth();
       let debtEditId = "";
+      let goalSelectSignature = "";
 
       // المسدد = الرصيد القديم + مجموع الدفعات المرتبطة عبر debtId
       function debtPaid(debt) {
@@ -803,8 +812,22 @@
         return data.transactions.filter(t => monthKey(t.date) === month);
       }
 
+      /* ================= الأهداف: تاريخ البداية والفترة ================= */
+
+      // تاريخ بداية الهدف الكامل. يدعم السجلات القديمة المخزنة كشهر فقط (YYYY-MM)
+      function goalStart(goal) {
+        const m = String(goal.month || "");
+        return m.length === 7 ? m + "-01" : m;
+      }
+
       function goalMonthKey(goal) {
-        return (goal.month || "").slice(0, 7);
+        return goalStart(goal).slice(0, 7);
+      }
+
+      // نهاية فترة الهدف: آخر يوم في شهر بدايته
+      function goalEnd(goal) {
+        const m = goalMonthKey(goal);
+        return `${m}-${pad2(getDays(m))}`;
       }
 
       function monthGoals(month) {
@@ -816,16 +839,80 @@
         return goals.find(g => g.primary) || goals[0] || null;
       }
 
-      function sumTransactions(list) {
-        return list.reduce((s, t) => s + incomeAmount(t), 0);
+      // الهدف المعروض: الهدف المختار إن كان من الشهر الحالي، وإلا هدف الشهر الحالي الأساسي
+      function getActiveGoal() {
+        const cm = currentMonth();
+        const id = data.settings.activeGoalId;
+        if (id && data.settings.activeGoalMonth === cm) {
+          const chosen = data.goals.find(g => g.id === id);
+          if (chosen) return chosen;
+        }
+        return mainGoal(cm);
       }
 
-      function dailySums(month) {
-        const result = {};
-        monthTransactions(month).forEach(t => {
-          result[t.date] = (result[t.date] || 0) + incomeAmount(t);
+      // دخل الهدف: العمليات من تاريخ بدايته حتى نهاية شهره (سجل واحد مشترك)
+      function goalEarned(goal) {
+        const s = goalStart(goal);
+        const e = goalEnd(goal);
+        return data.transactions
+          .filter(t => t.date >= s && t.date <= e)
+          .reduce((sum, t) => sum + incomeAmount(t), 0);
+      }
+
+      function goalActiveDays(goal) {
+        const s = goalStart(goal);
+        const e = goalEnd(goal);
+        const days = new Set();
+        data.transactions.forEach(t => {
+          if (t.date >= s && t.date <= e && incomeAmount(t) > 0) days.add(t.date);
         });
-        return result;
+        return days.size;
+      }
+
+      function countWorkDays(from, to) {
+        if (!from || !to || from > to) return 0;
+        let count = 0;
+        const d = new Date(from + "T12:00:00");
+        const last = new Date(to + "T12:00:00");
+        for (; d <= last; d.setDate(d.getDate() + 1)) {
+          const k = dateKey(d);
+          if (data.settings.excludeHolidays && data.holidays.includes(k)) continue;
+          count++;
+        }
+        return count;
+      }
+
+      // أيام العمل المتبقية للهدف حتى نهاية فترته
+      function goalDays(goal) {
+        const s = goalStart(goal);
+        const e = goalEnd(goal);
+        const today = dateKey(now());
+        if (today > e) return 0;
+
+        const tomorrowDate = new Date(now());
+        tomorrowDate.setDate(tomorrowDate.getDate() + 1);
+        let first = data.settings.includeToday ? today : dateKey(tomorrowDate);
+        if (s > first) first = s;
+        return countWorkDays(first, e);
+      }
+
+      function daysBetween(a, b) {
+        return Math.round((new Date(b + "T12:00:00") - new Date(a + "T12:00:00")) / DAY_MS) + 1;
+      }
+
+      function goalForecast(goal, earned) {
+        if (!goal) return 0;
+        const s = goalStart(goal);
+        const e = goalEnd(goal);
+        const today = dateKey(now());
+        if (today < s) return earned;
+        const total = daysBetween(s, e);
+        const elapsed = Math.min(total, daysBetween(s, today));
+        return elapsed ? earned / elapsed * total : earned;
+      }
+
+      function sumTransactions(list) {
+        return list.reduce((s, t) => s + incomeAmount(t), 0);
       }
 
       function getDays(month) {
@@ -833,27 +920,12 @@
         return new Date(year, mon, 0).getDate();
       }
 
-      function remainingWorkDays(month) {
-        const current = currentMonth();
-        if (month < current) return 0;
-
-        const isCurrent = month === current;
-        const todayNum = now().getDate();
-        const first = isCurrent
-          ? (data.settings.includeToday ? todayNum : todayNum + 1)
-          : 1;
-
-        let count = 0;
-        for (let day = first; day <= getDays(month); day++) {
-          const d = `${month}-${pad2(day)}`;
-          if (data.settings.excludeHolidays && data.holidays.includes(d)) continue;
-          count++;
-        }
-        return count;
-      }
-
       function fmtDate(date) {
         return new Date(date + "T12:00:00").toLocaleDateString("ar-IQ", { day: "numeric", month: "short" });
+      }
+
+      function fmtFull(date) {
+        return new Date(date + "T12:00:00").toLocaleDateString("ar-IQ", { day: "numeric", month: "short", year: "numeric" });
       }
 
       function escapeHTML(value) {
@@ -869,21 +941,44 @@
         return n.toLocaleString("en-US");
       }
 
+      /* ================= الرئيسية ================= */
+
+      function renderGoalSelect(active) {
+        const sel = $("goalSelect");
+        const goals = data.goals.slice().sort((a, b) =>
+          goalStart(b).localeCompare(goalStart(a)) || String(a.name).localeCompare(String(b.name))
+        );
+        const signature = (active ? "A" : "N") + goals.map(g => `${g.id}|${g.name}|${g.amount}|${goalStart(g)}`).join(";");
+
+        if (signature !== goalSelectSignature) {
+          goalSelectSignature = signature;
+          sel.innerHTML = "";
+          if (!active) sel.appendChild(new Option("— اختر هدفاً —", ""));
+          goals.forEach(g => {
+            sel.appendChild(new Option(`${g.name} · ${fmtFull(goalStart(g))} · ${money(g.amount)}`, g.id));
+          });
+        }
+        sel.value = active ? active.id : "";
+      }
+
       function renderDashboard() {
-        const month = selectedMonth;
-        const goal = mainGoal(month);
+        const goal = getActiveGoal();
         const goalValue = goal ? Number(goal.amount) : 0;
-        const txs = monthTransactions(month);
-        const earned = sumTransactions(txs);
+        const earned = goal ? goalEarned(goal) : 0;
         const remaining = Math.max(0, goalValue - earned);
-        const days = remainingWorkDays(month);
+        const days = goal ? goalDays(goal) : 0;
         const daily = days ? remaining / days : 0;
         const percent = goalValue ? Math.min(100, earned / goalValue * 100) : 0;
-        const activeDays = Object.values(dailySums(selectedMonth)).filter(v => v > 0).length;
+        const activeDays = goal ? goalActiveDays(goal) : 0;
         const average = activeDays ? earned / activeDays : 0;
+
+        renderGoalSelect(goal);
 
         $("heroEarned").textContent = money(earned);
         $("heroGoal").textContent = "الهدف: " + money(goalValue);
+        $("heroCaption").textContent = goal
+          ? `الفترة: من ${fmtFull(goalStart(goal))} إلى ${fmtFull(goalEnd(goal))}`
+          : "أضف هدفاً لعرض الحسابات";
         $("mainProgress").style.width = percent + "%";
         $("progressPercent").textContent = percent.toFixed(1) + "% من الهدف";
         $("statGoal").textContent = money(goalValue);
@@ -896,31 +991,28 @@
 
         if (!goal) {
           $("dailyStatus").textContent = "حدد هدفك أولاً";
-          $("dailyDescription").textContent = "أضف هدفاً شهرياً لاحتساب المطلوب يومياً.";
+          $("dailyDescription").textContent = "أضف هدفاً لاحتساب المطلوب يومياً.";
         } else if (remaining === 0) {
           $("dailyStatus").textContent = "تم تحقيق الهدف";
           $("dailyDescription").textContent = "وصلت إلى هدفك أو تجاوزته.";
         } else if (!days) {
-          $("dailyStatus").textContent = "انتهت الأيام";
-          $("dailyDescription").textContent = "لا توجد أيام عمل متبقية في هذا الشهر.";
+          $("dailyStatus").textContent = "انتهت الفترة";
+          $("dailyDescription").textContent = "لا توجد أيام عمل متبقية في فترة هذا الهدف.";
         } else {
           $("dailyStatus").textContent = "التارگت اليومي";
           $("dailyDescription").textContent = "المبلغ المطلوب في كل يوم عمل متبقٍ.";
         }
 
-        const monthDays = getDays(month);
-        const elapsed = month === currentMonth() ? now().getDate() : monthDays;
-        const expected = elapsed ? earned / elapsed * monthDays : 0;
-        const forecast = month === currentMonth() ? expected : earned;
+        const forecast = goalForecast(goal, earned);
         $("forecastValue").textContent = money(forecast);
         $("forecastStatus").textContent = goalValue ? (forecast >= goalValue ? "على المسار" : "دون الهدف") : "لا يوجد هدف";
         $("forecastText").textContent = goalValue
           ? `بحسب معدل الدخل الحالي، التوقع ${forecast >= goalValue ? "يتجاوز" : "أقل من"} الهدف بمقدار ${money(Math.abs(forecast - goalValue))}.`
-          : "أضف هدفاً شهرياً لعرض التوقع.";
+          : "أضف هدفاً لعرض التوقع.";
 
         renderTransactions(
           "recentTransactions",
-          txs.slice().sort((a, b) => b.date.localeCompare(a.date)).slice(0, 4)
+          monthTransactions(selectedMonth).slice().sort((a, b) => b.date.localeCompare(a.date)).slice(0, 4)
         );
       }
 
@@ -959,19 +1051,25 @@
       }
 
       function renderGoals() {
-        const list = monthGoals(selectedMonth);
+        const list = monthGoals(selectedMonth).slice().sort((a, b) => goalStart(a).localeCompare(goalStart(b)));
         if (!list.length) {
           $("goalsList").innerHTML = `<div class="empty"><div class="empty-icon">🎯</div>لم تضف أهدافاً لهذا الشهر بعد.</div>`;
           return;
         }
-        const earned = sumTransactions(monthTransactions(selectedMonth));
+        const activeId = (getActiveGoal() || {}).id;
         $("goalsList").innerHTML = list.map(g => {
+          const earned = goalEarned(g);
           const pct = Math.min(100, g.amount ? earned / g.amount * 100 : 0);
+          const flags = [
+            g.primary ? "الهدف الأساسي للشهر" : "هدف إضافي",
+            g.id === activeId ? "المعروض حالياً" : ""
+          ].filter(Boolean).join(" · ");
           return `<div class="goal-item">
             <div class="goal-line">
               <div>
                 <div class="goal-name">${escapeHTML(g.name)} ${g.primary ? "★" : ""}</div>
-                <div class="muted" style="font-size:10px">${g.primary ? "الهدف الأساسي" : "هدف إضافي"}</div>
+                <div class="muted" style="font-size:10px">${flags}</div>
+                <div class="muted" style="font-size:10px">من ${fmtFull(goalStart(g))} إلى ${fmtFull(goalEnd(g))}</div>
               </div>
               <div class="goal-amount">${money(g.amount)}</div>
             </div>
@@ -1040,6 +1138,14 @@
           }).join("");
       }
 
+      function dailySums(month) {
+        const result = {};
+        monthTransactions(month).forEach(t => {
+          result[t.date] = (result[t.date] || 0) + incomeAmount(t);
+        });
+        return result;
+      }
+
       function renderCalendar() {
         const [year, mon] = selectedMonth.split("-").map(Number);
         const firstDay = new Date(year, mon - 1, 1).getDay();
@@ -1086,10 +1192,11 @@
         for (let i = 5; i >= 0; i--) {
           const d = new Date(Number(selectedMonth.slice(0, 4)), Number(selectedMonth.slice(5, 7)) - 1 - i, 1);
           const m = `${d.getFullYear()}-${pad2(d.getMonth() + 1)}`;
+          const goal = mainGoal(m);
           months.push({
             month: m,
-            total: sumTransactions(monthTransactions(m)),
-            goal: mainGoal(m)?.amount || 0
+            total: goal ? goalEarned(goal) : sumTransactions(monthTransactions(m)),
+            goal: goal ? Number(goal.amount) : 0
           });
         }
 
@@ -1128,6 +1235,18 @@
       document.querySelectorAll(".nav-item").forEach(btn =>
         btn.addEventListener("click", () => showView(btn.dataset.view))
       );
+
+      /* ================= الانتقال التلقائي بين الأشهر ================= */
+
+      // يعمل عند فتح التطبيق وعند العودة إليه، ويتحقق دورياً إذا بقي مفتوحاً عبر منتصف الليل
+      function checkMonthRollover() {
+        const cm = currentMonth();
+        if (cm === lastKnownMonth) return;
+        lastKnownMonth = cm;
+        selectedMonth = cm;
+        $("monthPicker").value = cm;
+        renderAll();
+      }
 
       /* ================= نموذج الدخل ================= */
 
@@ -1273,7 +1392,7 @@
         const id = $("goalEditId").value;
 
         if (!name || !(amount > 0) || !isValidDate(goalDate)) {
-          return alert("يرجى إدخال اسم الهدف وقيمته والشهر بشكل صحيح.");
+          return alert("يرجى إدخال اسم الهدف وقيمته وتاريخ بدايته بشكل صحيح.");
         }
 
         if (id) {
@@ -1298,8 +1417,12 @@
             }
           }
         } else {
+          // إضافة هدف جديد دون أي تعديل على الأهداف السابقة
           const first = !data.goals.some(g => goalMonthKey(g) === month && g.primary);
-          data.goals.push({ id: uid(), name, amount, month: goalDate, primary: first });
+          const newId = uid();
+          data.goals.push({ id: newId, name, amount, month: goalDate, primary: first });
+          data.settings.activeGoalId = newId;
+          data.settings.activeGoalMonth = currentMonth();
         }
 
         selectedMonth = month;
@@ -1352,6 +1475,19 @@
         save();
       });
 
+      /* ================= اختيار الهدف المعروض ================= */
+
+      $("goalSelect").addEventListener("change", e => {
+        const g = data.goals.find(x => x.id === e.target.value);
+        if (!g) return;
+        // الاختيار لا يعدّل أي هدف ولا أي سجل دخل، بل يحدد ما يُعرض فقط
+        data.settings.activeGoalId = g.id;
+        data.settings.activeGoalMonth = currentMonth();
+        selectedMonth = goalMonthKey(g);
+        $("monthPicker").value = selectedMonth;
+        save();
+      });
+
       /* ================= الأزرار والعمليات ================= */
 
       document.addEventListener("click", e => {
@@ -1379,7 +1515,7 @@
             }
           }
 
-          // تصحيح الخطأ 3: إظهار التبويب أولاً حتى تعمل العجلة بشكل صحيح
+          // إظهار التبويب أولاً حتى تعمل العجلة بشكل صحيح
           showView("income");
 
           setPaymentMode(isPayment, t);
@@ -1443,7 +1579,6 @@
             return alert("المبلغ أكبر من الدين المتبقي.");
           }
 
-          // خيار جديد: هل المبلغ مدرج ضمن دخل اليوم؟
           const includedInIncome = confirm(
             "هل هذا المبلغ مدرج ضمن إجمالي دخل اليوم؟\n\n" +
             "«موافق»: جزء من الإجمالي (لا يُحسب مرتين)\n" +
@@ -1482,19 +1617,25 @@
           $("goalEditId").value = g.id;
           $("goalName").value = g.name;
           $("goalAmount").value = g.amount;
-          $("goalMonth").value = g.month.length === 7 ? g.month + "-01" : g.month;
+          $("goalMonth").value = goalStart(g);
           $("goalSubmit").textContent = "حفظ تعديلات الهدف";
           $("cancelGoalEdit").classList.remove("hidden");
           window.scrollTo({ top: 0, behavior: "smooth" });
         }
 
-        if (deleteGoal && confirm("هل تريد حذف هذا الهدف؟")) {
+        if (deleteGoal && confirm("هل تريد حذف هذا الهدف؟ سجل الدخل لن يتأثر.")) {
           const id = deleteGoal.dataset.deleteGoal;
-          const wasPrimary = data.goals.find(g => g.id === id)?.primary;
+          const target = data.goals.find(g => g.id === id);
+          const wasPrimary = target?.primary;
+          const targetMonth = target ? goalMonthKey(target) : selectedMonth;
           data.goals = data.goals.filter(g => g.id !== id);
           if (wasPrimary) {
-            const next = data.goals.find(g => goalMonthKey(g) === selectedMonth);
+            const next = data.goals.find(g => goalMonthKey(g) === targetMonth);
             if (next) next.primary = true;
+          }
+          if (data.settings.activeGoalId === id) {
+            delete data.settings.activeGoalId;
+            delete data.settings.activeGoalMonth;
           }
           save();
         }
@@ -1597,10 +1738,8 @@
           }
 
           if (t.category === DEBT_CATEGORY) {
-            // دفعات التسديد: مبلغ صحيح موجب بدون حد أدنى أو خطوة
             if (!Number.isInteger(t.amount) || t.amount <= 0) return false;
           } else {
-            // الدخل العادي: يخضع لعجلة الدخل
             if (!INCOME_CATEGORIES.includes(t.category) ||
                 t.amount < 50000 ||
                 t.amount > 500000 ||
@@ -1610,7 +1749,6 @@
           }
 
           if (t.debtId !== undefined) {
-            // debtId مسموح فقط على دفعات التسديد؛ المعرف غير الموجود يُزال لاحقاً
             if (t.category !== DEBT_CATEGORY || typeof t.debtId !== "string") return false;
           }
 
@@ -1622,7 +1760,6 @@
           transactionIds.add(t.id);
         }
 
-        // التحقق من أرصدة الديون: لا يجوز أن يتجاوز المسدد مبلغ الدين الأصلي
         for (const d of debts) {
           const linked = imported.transactions
             .filter(t => t.debtId === d.id)
@@ -1744,6 +1881,13 @@
         $("goalMonth").value = selectedMonth + "-01";
         renderAll();
       });
+
+      document.addEventListener("visibilitychange", () => {
+        if (!document.hidden) checkMonthRollover();
+      });
+      window.addEventListener("focus", checkMonthRollover);
+      window.addEventListener("pageshow", checkMonthRollover);
+      setInterval(checkMonthRollover, 60000);
 
       renderAll();
     })();
