@@ -955,7 +955,7 @@
           sel.innerHTML = "";
           if (!active) sel.appendChild(new Option("— اختر هدفاً —", ""));
           goals.forEach(g => {
-            sel.appendChild(new Option(`${g.name} · ${fmtFull(goalStart(g))} · ${money(g.amount)}`, g.id));
+sel.appendChild(new Option(`${g.name} · ${money(g.amount)}`, g.id));
           });
         }
         sel.value = active ? active.id : "";
