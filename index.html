@@ -330,6 +330,91 @@
     body.dark .pay-btn { background: #203D30; color: #8DD9AC; }
     body.dark .primary-goal-btn { background: #382D4A; color: #C7A8F0; }
     body.dark .cancel-btn { background: #343434; color: #D0D0D0; }
+
+    /* ===== التقرير الشهري ===== */
+    #reportArea {
+      --r-bg: #ffffff;
+      --r-surface: #f7f9fc;
+      --r-text: #17243a;
+      --r-muted: #6b7587;
+      --r-border: #e3e8f0;
+      --r-accent: #14243f;
+      --r-good: #20a77a;
+      margin-top: 16px;
+    }
+    body.dark #reportArea {
+      --r-bg: #172337;
+      --r-surface: #1c2a40;
+      --r-text: #edf3fc;
+      --r-muted: #98a8bf;
+      --r-border: #293951;
+      --r-accent: #dce8fa;
+      --r-good: #31c9b4;
+    }
+    .report {
+      background: var(--r-bg);
+      color: var(--r-text);
+      border: 1px solid var(--r-border);
+      border-radius: 18px;
+      padding: 18px;
+      box-shadow: var(--shadow);
+    }
+    .report-header { border-bottom: 2px solid var(--r-border); padding-bottom: 12px; margin-bottom: 4px; }
+    .report-title { font-size: 18px; font-weight: 800; }
+    .report-sub { font-size: 11px; color: var(--r-muted); margin-top: 4px; line-height: 1.7; }
+    .report-section { margin-top: 18px; }
+    .report-h { font-size: 14px; font-weight: 800; margin-bottom: 10px; color: var(--r-accent); }
+    .report-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .report-kpi {
+      background: var(--r-surface);
+      border: 1px solid var(--r-border);
+      border-radius: 12px;
+      padding: 10px;
+      min-width: 0;
+    }
+    .report-kpi-label { font-size: 10px; color: var(--r-muted); }
+    .report-kpi-value { font-size: 14px; font-weight: 800; margin-top: 4px; direction: ltr; text-align: right; overflow-wrap: anywhere; }
+    .report-item {
+      padding: 12px 0;
+      border-bottom: 1px solid var(--r-border);
+    }
+    .report-item:last-child { border-bottom: 0; }
+    .report-item-head { font-size: 13px; margin-bottom: 6px; }
+    .report-line {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      font-size: 12px;
+      padding: 3px 0;
+    }
+    .report-line > span:last-child { direction: ltr; font-weight: 700; white-space: nowrap; }
+    .report-total { border-top: 1px solid var(--r-border); margin-top: 6px; padding-top: 8px; font-weight: 800; }
+    .report-note { font-size: 10px; color: var(--r-muted); margin-top: 2px; }
+    .report-bar { height: 6px; background: var(--r-surface); border: 1px solid var(--r-border); border-radius: 20px; margin: 8px 0 4px; overflow: hidden; }
+    .report-bar span { display: block; height: 100%; background: var(--r-good); border-radius: 20px; }
+    .report-empty { text-align: center; color: var(--r-muted); font-size: 12px; padding: 14px 6px; }
+
+    @media print {
+      @page { margin: 12mm; }
+      body { background: #ffffff !important; padding: 0 !important; }
+      body * { visibility: hidden !important; }
+      #reportArea, #reportArea * { visibility: visible !important; }
+      #reportArea, body.dark #reportArea {
+        position: absolute;
+        top: 0; right: 0; left: 0;
+        margin: 0;
+        --r-bg: #ffffff;
+        --r-surface: #ffffff;
+        --r-text: #000000;
+        --r-muted: #444444;
+        --r-border: #bbbbbb;
+        --r-accent: #000000;
+        --r-good: #000000;
+      }
+      .report { border: 0; padding: 0; box-shadow: none; }
+      .report-kpi { background: #ffffff; }
+      .report-bar span { background: #000000; }
+    }
   </style>
 </head>
 <body>
@@ -616,6 +701,20 @@
           <div class="section-head"><div class="section-title">مقارنة الأشهر</div></div>
           <div class="panel" id="monthlyComparison"></div>
         </div>
+
+        <div class="section">
+          <div class="section-head"><div class="section-title">التقرير الشهري</div></div>
+          <div class="panel">
+            <div class="form-row">
+              <button class="primary-btn" id="toggleReport" type="button">عرض التقرير الشهري</button>
+              <button class="secondary-btn" id="printReport" type="button">تصدير PDF</button>
+            </div>
+            <div class="muted" style="font-size:10px;margin-top:10px;line-height:1.7">
+              التقرير يتبع الشهر المحدد في الصفحة الرئيسية. زر «تصدير PDF» يفتح واجهة الطباعة، ومنها اختر «حفظ كـ PDF».
+            </div>
+          </div>
+          <div id="reportArea" class="hidden"></div>
+        </div>
       </section>
 
       <!-- الإعدادات -->
@@ -777,6 +876,7 @@
       let lastKnownMonth = currentMonth();
       let debtEditId = "";
       let goalSelectSignature = "";
+      let reportVisible = false;
 
       // المسدد = الرصيد القديم + مجموع الدفعات المرتبطة عبر debtId
       function debtPaid(debt) {
@@ -955,7 +1055,7 @@
           sel.innerHTML = "";
           if (!active) sel.appendChild(new Option("— اختر هدفاً —", ""));
           goals.forEach(g => {
-sel.appendChild(new Option(`${g.name} · ${money(g.amount)}`, g.id));
+            sel.appendChild(new Option(`${g.name} · ${money(g.amount)}`, g.id));
           });
         }
         sel.value = active ? active.id : "";
@@ -1209,6 +1309,155 @@ sel.appendChild(new Option(`${g.name} · ${money(g.amount)}`, g.id));
         }).join("");
       }
 
+      /* ================= التقرير الشهري ================= */
+
+      // يجمع بيانات الشهر المحدد من الدوال الحالية دون تعديل أي سجل
+      function buildMonthlyReport(month) {
+        const txs = monthTransactions(month);
+        const total = sumTransactions(txs);
+        const opsCount = txs.filter(t => incomeAmount(t) > 0).length;
+        const average = opsCount ? total / opsCount : 0;
+
+        const daily = dailySums(month);
+        const dayKeys = Object.keys(daily).filter(k => daily[k] > 0);
+        let bestDay = null;
+        let bestAmount = 0;
+        dayKeys.forEach(k => {
+          if (daily[k] > bestAmount) {
+            bestAmount = daily[k];
+            bestDay = k;
+          }
+        });
+
+        const goalRows = monthGoals(month)
+          .slice()
+          .sort((a, b) => goalStart(a).localeCompare(goalStart(b)))
+          .map(g => {
+            const target = Number(g.amount);
+            const earned = goalEarned(g);
+            return {
+              goal: g,
+              target,
+              earned,
+              remaining: Math.max(0, target - earned),
+              percent: target ? earned / target * 100 : 0
+            };
+          });
+
+        const payments = txs
+          .filter(t => t.category === DEBT_CATEGORY)
+          .sort((a, b) => a.date.localeCompare(b.date));
+        const paymentsTotal = payments.reduce((s, t) => s + Number(t.amount || 0), 0);
+
+        return {
+          total,
+          opsCount,
+          average,
+          bestDay,
+          bestAmount,
+          activeDays: dayKeys.length,
+          goalRows,
+          payments,
+          paymentsTotal
+        };
+      }
+
+      function renderMonthlyReport() {
+        const area = $("reportArea");
+        const r = buildMonthlyReport(selectedMonth);
+        const [y, mo] = selectedMonth.split("-").map(Number);
+        const monthName = new Date(y, mo - 1, 1).toLocaleDateString("ar-IQ", { month: "long", year: "numeric" });
+        const hasData = r.total > 0 || r.goalRows.length > 0 || r.payments.length > 0;
+
+        area.classList.remove("hidden");
+
+        const header = `
+          <div class="report-header">
+            <div class="report-title">التقرير الشهري · ${escapeHTML(monthName)}</div>
+            <div class="report-sub">
+              تقرير خاص بالشهر المحدد في الصفحة الرئيسية<br>
+              تاريخ الإعداد: ${fmtFull(dateKey(now()))}
+            </div>
+          </div>`;
+
+        if (!hasData) {
+          area.innerHTML = `<div class="report" dir="rtl">${header}
+            <div class="report-empty">لا توجد بيانات مسجلة لهذا الشهر.</div>
+          </div>`;
+          return;
+        }
+
+        const kpi = (label, value) => `
+          <div class="report-kpi">
+            <div class="report-kpi-label">${label}</div>
+            <div class="report-kpi-value">${value}</div>
+          </div>`;
+
+        const incomeHTML = `
+          <div class="report-grid">
+            ${kpi("إجمالي الدخل خلال الشهر", money(r.total))}
+            ${kpi("عدد عمليات تسجيل الدخل", r.opsCount)}
+            ${kpi("متوسط قيمة العملية", money(r.average))}
+            ${kpi("أعلى دخل في يوم واحد", money(r.bestAmount))}
+            ${kpi("تاريخ أعلى يوم", r.bestDay ? fmtFull(r.bestDay) : "—")}
+            ${kpi("أيام تسجيل الدخل", r.activeDays)}
+          </div>`;
+
+        const goalsHTML = r.goalRows.length
+          ? r.goalRows.map(row => `
+            <div class="report-item">
+              <div class="report-item-head"><strong>${escapeHTML(row.goal.name)}</strong>${row.goal.primary ? " ★" : ""}</div>
+              <div class="report-line"><span>المبلغ المستهدف</span><span>${money(row.target)}</span></div>
+              <div class="report-line"><span>المبلغ المحقق</span><span>${money(row.earned)}</span></div>
+              <div class="report-line"><span>المبلغ المتبقي</span><span>${money(row.remaining)}</span></div>
+              <div class="report-line"><span>نسبة الإنجاز</span><span>${row.percent.toFixed(1)}%</span></div>
+              <div class="report-bar"><span style="width:${Math.min(100, row.percent)}%"></span></div>
+              <div class="report-note">الفترة: من ${fmtFull(goalStart(row.goal))} إلى ${fmtFull(goalEnd(row.goal))}</div>
+            </div>`).join("")
+          : `<div class="report-empty">لا توجد أهداف مسجلة لهذا الشهر.</div>`;
+
+        const paymentsHTML = r.payments.length
+          ? `${r.payments.map(t => `
+            <div class="report-item">
+              <div class="report-line">
+                <span>${fmtFull(t.date)}${t.note ? " · " + escapeHTML(t.note) : ""}</span>
+                <span>${money(t.amount)}</span>
+              </div>
+              <div class="report-note">${t.excludeFromIncome
+                ? "مدرجة ضمن دخل اليوم، ولم تُحسب مرتين"
+                : "مبلغ إضافي أُضيف إلى الإجمالي"}</div>
+            </div>`).join("")}
+            <div class="report-line report-total">
+              <span>مجموع تسديدات الديون</span>
+              <span>${money(r.paymentsTotal)}</span>
+            </div>`
+          : `<div class="report-empty">لا توجد تسديدات ديون خلال هذا الشهر.</div>`;
+
+        area.innerHTML = `
+          <div class="report" dir="rtl">
+            ${header}
+            <div class="report-section">
+              <div class="report-h">ملخص الدخل الشهري</div>
+              ${incomeHTML}
+            </div>
+            <div class="report-section">
+              <div class="report-h">الأهداف المالية (${r.goalRows.length})</div>
+              ${goalsHTML}
+            </div>
+            <div class="report-section">
+              <div class="report-h">تسديدات الديون (للاطلاع، ولا تُضاف مرة ثانية إلى الإجمالي)</div>
+              ${paymentsHTML}
+            </div>
+          </div>`;
+      }
+
+      function setReportVisible(on) {
+        reportVisible = on;
+        $("reportArea").classList.toggle("hidden", !on);
+        $("toggleReport").textContent = on ? "إخفاء التقرير" : "عرض التقرير الشهري";
+        if (on) renderMonthlyReport();
+      }
+
       function renderAll() {
         renderDashboard();
         renderIncome();
@@ -1216,6 +1465,7 @@ sel.appendChild(new Option(`${g.name} · ${money(g.amount)}`, g.id));
         renderDebts();
         renderCalendar();
         renderAnalytics();
+        if (reportVisible) renderMonthlyReport();
         $("includeToday").checked = !!data.settings.includeToday;
         $("excludeHolidays").checked = !!data.settings.excludeHolidays;
         $("darkMode").checked = !!data.settings.darkMode;
@@ -1679,6 +1929,18 @@ sel.appendChild(new Option(`${g.name} · ${money(g.amount)}`, g.id));
       $("themeBtn").addEventListener("click", () => {
         data.settings.darkMode = !data.settings.darkMode;
         save();
+      });
+
+      /* ================= التقرير: عرض وطباعة ================= */
+
+      $("toggleReport").addEventListener("click", () => {
+        setReportVisible(!reportVisible);
+      });
+
+      // يعرض التقرير أولاً ثم يفتح واجهة الطباعة، لتحفظه PDF من iPhone
+      $("printReport").addEventListener("click", () => {
+        setReportVisible(true);
+        window.print();
       });
 
       /* ================= النسخ الاحتياطي ================= */
